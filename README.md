@@ -1,10 +1,13 @@
 # Route-Planner
+*Authors*
+`Gaspard VIEUJEAN`
+`Boris GANGUE`
+`Ahmed YAHA`
 ---
 
 
 # PROJECT STRUCTURE
 ```
-/
 |── ressource/
 │   ├── north.png
 │── sql/
@@ -22,4 +25,35 @@
 │   │   ├── LoginDialog.cpp
 │   ├── main.cpp
 │── README.md
+```
+
+# Database
+
+```
++-----------+
+| CONTOUR   |
++-----------+
+| num_pt (PK) |
+| lat         |
+| lon         |
++-----------+
+
++-----------+                 +-----------+
+| WAYPOINT  |                 | ROUTE     |
++-----------+                 +-----------+
+| nom (PK)  | ◄────────────►  | nom_debut (FK) |
+| lat       | ◄────────────►  | nom_fin (FK)   |
+| lon       |                 | distance       |
++-----------+                 +-----------+
+    ▲                
+    │               
+    │               
++-----------+           
+| VILLE     |           
++-----------+         
+| nom (PK, FK) |
+| code_postal  |
+| nb_habitants |
+| site         |
++-----------+
 ```
