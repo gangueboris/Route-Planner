@@ -1,47 +1,35 @@
-﻿#ifndef POINT_H
-#define POINT_H
+﻿/**
+ * @class Point
+ * @brief Contains a number of points
+ * 
+ * This class allows getting lat and lon from a point
+ * 
+ * @author Gaspard Vieujean
+ * @date March 21, 2025
+ */
 
-#include <iostream>
-#include <string>
-#include <iomanip>
-#include <sstream>
-
-class Point {
-	private :
-		int id_plan;
-		std::string nom_mur;
-		int num;
-		float x, y;
-	public :
-		Point (int id=0, std::string nom="", int num=0, float x=0, float y=0): id_plan(id),nom_mur(nom), num(num), x(x), y(y){
-		}
-		/*string getNomMur() const{
-			return nom_mur;
-		}*/
-		int getNum() const{
-			return num;
-		}
-		float getX() const{
-			return x;
-		}
-		float getY() const{
-			return y;
-		}
-		void setX(float x){
-			this->x = x;
-		}
-		void setY(float y){
-			this->y = y;
-		}
-		std::string getInfos() const {
-			std::ostringstream texte;
-			texte << "Point " << std::setprecision(2) << std::fixed 
-					<< num << "\n(" << x << "," << y << ")";
-			return texte.str();
-		}
-		void affiche() const{
-				std::cout << "\tpoint " << num << " (" << x << "," << y << ")\n";
-		}
-
-};
-#endif
+ #ifndef POINT_H
+ #define POINT_H
+ 
+ #include <iostream>
+ #include <string>
+ #include <iomanip>
+ #include <sstream>
+ 
+ class Point {
+	 public :
+		 //Constructor and Destructor
+		 Point (int init_num, float init_lat, float init_lon): num{init_num}, lat{init_lat}, lon{init_lon} {};
+		 ~Point (){};
+ 
+		 //Member fonction
+		 float getLon(){return lon;};
+		 float getLat(){return lat;};
+	 private :
+		 int num;
+		 float lat;
+		 float lon;
+ 
+ };
+ #endif
+ 

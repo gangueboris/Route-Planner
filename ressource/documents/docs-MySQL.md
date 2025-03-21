@@ -2,15 +2,18 @@ Write here steps that we have to follow to setup the database on our local machi
 
 This is a proposal on how it should looks like:
 
+
 ## DATABASE CONNEXION INFORMATIONS
 host: localhost
-database: itineraire
+database: routeplanner
 username: routePlanner
 password: azerty1234
 
-## COMMAND TO CONNECT MYSQL WITH A SPECIFIC USER 
-```sh
-mysql -u routePlanner -p -h localhost
+## CREATE DATABASE
+``` sql
+create database 'databasename';
+use 'databasename';
+source itineraire.sql;
 ```
 
 ## CREATE A MYSQL USER
@@ -18,6 +21,11 @@ mysql -u routePlanner -p -h localhost
 CREATE USER 'username'@'%localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON my_database.* TO 'username'@'%localhost';
 FLUSH PRIVILEGES;
+```
+
+## COMMAND TO CONNECT MYSQL WITH A SPECIFIC USER 
+```sh
+mysql -u routePlanner -p -h localhost
 ```
 
 ## VERIFY USER PRIVILEGES
@@ -29,7 +37,6 @@ SELECT user, host FROM mysql.user WHERE user = 'routePlanner';
 SELECT user, host FROM mysql.user;
 ```
 
-
 ## TODO
 1. Setup the database login
 2. Comment my project
@@ -37,3 +44,6 @@ SELECT user, host FROM mysql.user;
 
 ## Issues
 - Can't load data for the database.
+
+
+

@@ -10,12 +10,25 @@ BDD::BDD ( std::string host, std::string nomBDD, std::string login, std::string 
 
 		setlocale(LC_ALL,"C");
 }
+
 BDD::~BDD(){
 	std::cout << "Fermeture connection\n";
 	delete con;
 }
 
-Plan BDD::selectPlan(int id){
+void BDD::getPointsBDD(std::vector<Point> &points){
+	
+	sql::Statement *stmt = con->createStatement();
+	sql::ResultSet *res = stmt->executeQuery("SELECT num_pt, lat, lon FROM contour");
+	while(res->next()){ /*when all the lines are read return FALSE and stops*/
+		int num_pt = res->getInt("num_pt");
+		float lat = res->getDouble("lat");
+		float lon = res->getDouble("lon");
+		points.push_back(Point(num_pt,lat,lon));
+	}
+};
+
+/*Plan BDD::selectPlan(int id){
 
 	sql::Statement *stmt = con->createStatement();
 	sql::ResultSet *res = stmt->executeQuery(
@@ -105,4 +118,4 @@ Plan BDD::getPlan(int id){
 		this->ajouterPoints(mur);
 	}
 	return plan;
-}
+}*/
