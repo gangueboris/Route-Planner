@@ -137,7 +137,6 @@ private:
 };
 ```
 
-<<<<<<< HEAD
 **For a method**
 ```cpp
 /**
@@ -151,7 +150,7 @@ void ContactManager::addContact(const std::string& name, const std::string& phon
     contacts[name] = phone;
 }
 ```
-=======
+
 +-----------+                 +-----------+
 | WAYPOINT  |                 | ROUTE     |
 +-----------+                 +-----------+
