@@ -172,12 +172,3 @@ void ContactManager::addContact(const std::string& name, const std::string& phon
 +-----------+
 ```
 
-aaaa
-daihdiahdb
-ta
-t
-at
-ta
->>>>>>> cc4c8a48a38969e511387bcd57ecc8f2a4106501
-aaa
-dkaihdhada
