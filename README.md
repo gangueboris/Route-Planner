@@ -137,7 +137,6 @@ private:
 };
 ```
 
-<<<<<<< HEAD
 **For a method**
 ```cpp
 /**
@@ -151,31 +150,3 @@ void ContactManager::addContact(const std::string& name, const std::string& phon
     contacts[name] = phone;
 }
 ```
-=======
-+-----------+                 +-----------+
-| WAYPOINT  |                 | ROUTE     |
-+-----------+                 +-----------+
-| nom (PK)  | ◄────────────►  | nom_debut (FK) |
-| lat       | ◄────────────►  | nom_fin (FK)   |
-| lon       |                 | distance       |
-+-----------+                 +-----------+
-    ▲                
-    │               
-    │               
-+-----------+           
-| VILLE     |           
-+-----------+         
-| nom (PK, FK) |
-| code_postal  |
-| nb_habitants |
-| site         |
-+-----------+
-```
-
-aaaa
-daihdiahdb
-ta
-t
-at
-ta
->>>>>>> cc4c8a48a38969e511387bcd57ecc8f2a4106501
