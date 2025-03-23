@@ -61,7 +61,6 @@ The project involves developing a graphical application in C++ to calculate and 
 ![class-MVC](<ressource/images/class-mvc.png>)!
 
 ---
-![alt text](<ressource/images/BDD-mvc.png>)
 
 - **Important Methods:**  
   - `neighbours(int index) → vector<int>`: Returns neighboring waypoints.  
