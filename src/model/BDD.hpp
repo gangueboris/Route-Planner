@@ -10,7 +10,7 @@
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
 
-#include "Point.h"
+#include "Point.hpp"
 
 class BDD {
 	public :

@@ -1,4 +1,4 @@
-﻿#include "BDD.h"
+﻿#include "BDD.hpp"
 
 BDD::BDD ( std::string host, std::string nomBDD, std::string login, std::string pwd){
 		/* Create a connection */

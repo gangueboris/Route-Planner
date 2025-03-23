@@ -18,8 +18,8 @@ source itineraire.sql;
 
 ## CREATE A MYSQL USER
 ``` sql
-CREATE USER 'username'@'%localhost' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON my_database.* TO 'username'@'%localhost';
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON my_database.* TO 'username'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
@@ -30,7 +30,7 @@ mysql -u routePlanner -p -h localhost
 
 ## VERIFY USER PRIVILEGES
 ``` sql
-SHOW GRANTS FOR 'username'@'%';
+SHOW GRANTS FOR 'username'@'localhost';
 ```
 ```sql
 SELECT user, host FROM mysql.user WHERE user = 'routePlanner';

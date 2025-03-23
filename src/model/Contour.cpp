@@ -1,4 +1,4 @@
-#include "Contour.h"
+#include "Contour.hpp"
 
 Contour::Contour(){
 

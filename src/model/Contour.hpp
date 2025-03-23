@@ -16,8 +16,8 @@
  #include <iomanip>
  #include <sstream>
  #include <vector>
- #include "Point.h"
- #include "BDD.h"
+ #include "Point.hpp"
+ #include "BDD.hpp"
  
  class Contour {
      public :
@@ -29,7 +29,7 @@
          std::vector<Point> getPoints();
          void ajoutUnPoint(Point p);
      
- }
+ };
  
  
  
@@ -51,4 +51,4 @@
  
  
  
- #endif;
+ #endif
