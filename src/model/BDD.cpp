@@ -9,6 +9,21 @@ BDD::BDD ( std::string host, std::string nomBDD, std::string login, std::string 
 		con->setSchema(nomBDD);
 
 		setlocale(LC_ALL,"C");
+		
+		Contour contour(contour);
+		std::vector<Waypoint> waypoints;
+		std::vector<Route> routes;
+		std::vector<Ville> villes;
+
+		
+		readContourFromDb(contour);
+		readWaypointsFromDb(waypoints);
+		readVilleFromDb(villes);
+		readRouteFromDb(routes);
+
+
+
+		this->carte = Carte(contour, routes, villes, waypoints);
 }
 
 BDD::~BDD(){
@@ -16,106 +31,59 @@ BDD::~BDD(){
 	delete con;
 }
 
-void BDD::getPointsBDD(std::vector<Point> &points){
+void BDD::readContourFromDb(Contour &Contour){
 	
 	sql::Statement *stmt = con->createStatement();
 	sql::ResultSet *res = stmt->executeQuery("SELECT num_pt, lat, lon FROM contour");
+	
+
 	while(res->next()){ /*when all the lines are read return FALSE and stops*/
 		int num_pt = res->getInt("num_pt");
 		float lat = res->getDouble("lat");
 		float lon = res->getDouble("lon");
-		points.push_back(Point(num_pt,lat,lon));
+		Contour.getPoints().push_back(Point(num_pt,lat,lon));
 	}
 };
 
-/*Plan BDD::selectPlan(int id){
-
-	sql::Statement *stmt = con->createStatement();
-	sql::ResultSet *res = stmt->executeQuery(
-					"select * from plan where id_plan="+std::to_string(id) );
-	res->next();
-	Plan plan( res->getInt(1), res->getString(2),
-						res->getInt(3), res->getInt(4), res->getString(5) );
-
-	delete res;
-	delete stmt;
-
-	return plan;
-}
-
-void BDD::inserePlan(Plan &plan){
-
-	sql::Statement *stmt = con->createStatement();
-	// Ajout nouveau plan
-	stmt->execute("insert into plan values (null,'" // null => auto_increment
-			+plan.getNomProjet()+"',"
-			+std::to_string(plan.getVersion())+","
-			+std::to_string(plan.getOrientation())
-			+",sysdate())"
-			);
-	for ( auto &mur : plan.getMurs() ){
-		// Ajout mur
-		// récup id_plan
-		sql::ResultSet *res = stmt->executeQuery("select last_insert_id()");
-		res->next();
-		int id = res->getInt(1);		
-		delete res;
-		
-		stmt->execute("insert into mur values ("
-				+std::to_string(id)+",'"
-				+mur.getNomMur()+"','"
-				+mur.getCouleur()+"',"
-				+std::to_string(mur.getEpaisseur())+")"
-				);
-		// Ajout point
-		for ( auto &pt : mur.getPoints() ){
-		stmt->execute("insert into point values ("
-				+std::to_string(id)+",'"
-				+mur.getNomMur()+"',"
-				+std::to_string(pt.getNum())+","
-				+std::to_string(pt.getX())+","
-				+std::to_string(pt.getY())+")"
-				);
-		} // fin insert point
-
-	} // fin insert mur
+void BDD::readRouteFromDb(std::vector<Route> & route){
 	
-	delete stmt;
-}
-
-void BDD::ajouterMurs(Plan &plan){
-
 	sql::Statement *stmt = con->createStatement();
-	sql::ResultSet *res = stmt->executeQuery(
-				"select * from mur where id_plan="
-					+ std::to_string(plan.getIdPlan()) );
-	while (res->next()) {
-		plan.ajoutUnMur(Mur(res->getInt(1),res->getString(2),res->getString(3),res->getDouble(4)) );
-	}
-	delete res;
-	delete stmt;
-}
-void BDD::ajouterPoints(Mur &mur){
+	sql::ResultSet *res = stmt->executeQuery("SELECT nom_debut, nom_fin, distance FROM route");
+	
 
+	while(res->next()){ /*when all the lines are read return FALSE and stops*/
+		std:: string num_debut = res->getString("nom_debut");
+		std:: string nom_fin = res->getString("nom_fin");
+		int distance = res->getInt("distance");
+		route.push_back(Route(num_debut,nom_fin,distance));
+	}
+};
+
+void BDD::readVilleFromDb(std::vector<Ville> & ville){
+	
 	sql::Statement *stmt = con->createStatement();
-	sql::ResultSet *res = stmt->executeQuery(
-				"select * from point where id_plan="
-						+ std::to_string(mur.getIdPlan())
-						+ " and nom_mur='"+mur.getNomMur()+"'"
-						+ " order by num" );
-	while (res->next()) {
-		Point pt (res->getInt(1),res->getString(2),res->getInt(3),res->getDouble(4),res->getDouble(5));
-		mur.ajoutUnPoint(pt);
-	}
-	delete res;
-	delete stmt;
-}
+	sql::ResultSet *res = stmt->executeQuery("SELECT code_postal, nb_habitants, site FROM ville");
+	
 
-Plan BDD::getPlan(int id){
-	Plan plan = this->selectPlan(1);
-	this->ajouterMurs(plan);
-	for ( auto &mur : plan.getMurs() ){
-		this->ajouterPoints(mur);
+	while(res->next()){ /*when all the lines are read return FALSE and stops*/
+		std::string code_postal = res->getString("code_postal");
+		int nb_habitants = res->getInt("nb_habitants");
+		std:: string site = res->getString("site");
+		ville.push_back(Ville(code_postal,nb_habitants,site));
 	}
-	return plan;
-}*/
+};
+
+void BDD::readWaypointsFromDb(std::vector<Waypoint> & waypoint){
+	
+	sql::Statement *stmt = con->createStatement();
+	sql::ResultSet *res = stmt->executeQuery("SELECT nom,lat, lon FROM waypoint");
+	
+
+	while(res->next()){ /*when all the lines are read return FALSE and stops*/
+		std::string nom = res->getString("nom");
+		int lat = res->getInt("lat");
+		int lon = res->getInt("lon");
+		waypoint.push_back(Waypoint(nom,lat,lon));
+	}
+};
+

@@ -11,24 +11,27 @@
 #include <cppconn/statement.h>
 
 #include "Point.hpp"
+#include "Carte.hpp"
+#include "Contour.hpp"
+#include "Ville.hpp"
+#include "Route.hpp"
 
 class BDD {
 	public :
 		/*Constructor and Destructor*/
-		BDD ( std::string host, std::string nomBDD, std::string login, std::string pwd);
+		BDD (std::string host, std::string nomBDD, std::string login, std::string pwd);
 		~BDD();
 
 		/*Member Function*/
-		void getPointsBDD(std::vector<Point> points);
+		void readContourFromDb(Contour &Contour);
+		void readRouteFromDb(std::vector<Route> & route);
+		void readVilleFromDb(std::vector<Ville> & ville);
+		void readWaypointsFromDb(std::vector<Waypoint> & waypoint);
+		Carte getCarte(){return carte;}
 
-
-		/*Plan selectPlan(int id);
-		void ajouterMurs(Plan &plan);
-		void ajouterPoints(Mur &mur);
-		Plan getPlan(int id);
-		void inserePlan(Plan &plan);*/
 
 	private :
 		sql::Connection *con;
+		Carte carte;
 };
 #endif
