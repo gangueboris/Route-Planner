@@ -20,14 +20,18 @@
  #include "BDD.hpp"
  
  class Contour {
-     public :
+    public :
          /*Destructor and Constructor*/
-         Contour();
+         Contour(std::vector<Point> contour_init): contour{contour_init}{}
          ~Contour(){};
  
          /*Member Function*/
-         std::vector<Point> getPoints();
+         std::vector<Point> getPoints(){return contour;}
          void ajoutUnPoint(Point p);
+
+    private : 
+        std::vector<Point> contour;
+
      
  };
  

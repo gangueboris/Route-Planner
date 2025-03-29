@@ -1,15 +1,18 @@
 #ifndef _VILLE_H_
 #define _VILLE_H_
 
-#include "WayPoint.hpp"
+#include "Waypoint.hpp"
 
 #include <string>
 #include <iostream>
+#include <sstream>
 
 class Ville : public Waypoint {
     public:
        // Constructor
-       Ville();
+        Ville(std::string nom, float lon, float lat, std::string code_postal_init, int nb_habitants_init, std::string site_init)
+        : Waypoint(nom, lon, lat), code_postal(code_postal_init), nb_habitants(nb_habitants_init), site(site_init) {}
+
        
        // Destructor
        ~Ville(){};
