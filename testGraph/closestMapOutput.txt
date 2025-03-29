@@ -1,0 +1,175 @@
+//=========================== Relation créée par 'createAdjacencyList()'==================================
+Yffiniac, Saint Brieuc
+Savenay, Pontchateau
+Saint Pol de Léon, Roscoff
+Saint Michel-en-Grève, Lannion
+Saint Brieuc, Yffiniac
+Rennes, Mesnil Roc'h
+Redon, Pontchateau
+Quimperlé, Lorient
+Pontorson, Pontaubault
+Pontchateau, Pont de Saint Nazaire
+Vannes, Auray
+Pontaubault, Avranches
+Pont de l'Iroise, Guipavas Aéroport
+Ploermel, Pont du Morbihan
+Paimpol, Guingamp
+Roscoff, Saint Pol de Léon
+Pont L'Abbé, Quimper
+Nantes, Porte des Sorinières
+Daoulas, Pont de l'Iroise
+Chateaulin, Quimper
+Cholet, Ancenis
+Dinard, Barrage de la Rance
+Quimper, Pont L'Abbé
+Porte des Sorinières, Nantes
+Laval, Vitré
+Barrage de la Rance, Saint Malo
+La Rochelle, Marans
+Brest, Guipavas Aéroport
+Vitré, Fougères
+Pont du Morbihan, Pontchateau
+Avranches, Pontaubault
+Lannion, Saint Michel-en-Grève
+Villeneuve-en-Retz, Pornic
+Auray, Vannes
+Pontivy, Loudéac
+Echangeur de Tramain, Lamballe
+Angers, Cholet
+Pornic, Villeneuve-en-Retz
+Caen, Avranches
+Saint Malo, Barrage de la Rance
+Dinan, Mesnil Roc'h
+Ancenis, Porte des Sorinières
+Echangeur de la Chesnaie, Mesnil Roc'h
+Carhaix, Morlaix
+Fougères, Vitré
+Guipavas Aéroport, Pont de l'Iroise
+Pont de Saint Nazaire, Pontchateau
+Hennebont, Lorient
+Pont de la Corde, Saint Pol de Léon
+Guingamp, Paimpol
+Lorient, Hennebont
+La Roche sur Yon, Porte des Sorinières
+Mesnil Roc'h, Echangeur de la Chesnaie
+Lamballe, Echangeur de Tramain
+Marans, La Rochelle
+Loudéac, Pontivy
+Morlaix, Pont de la Corde
+
+
+//=========================== Relation créée par 'createWeightedAdjacencyList()' ========================
+
+La Roche sur Yon : [(Porte des Sorinières, 57000.5); ]
+
+Echangeur de la Chesnaie : [(Mesnil Roc'h, 12984.5); ]
+
+Lamballe : [(Echangeur de Tramain, 13601.6); ]
+
+Morlaix : [(Carhaix, 44191.9); (Pont de la Corde, 15746.5); ]
+
+Loudéac : [(Pontivy, 26097.1); ]
+
+Angers : [(Cholet, 58500.3); ]
+
+Echangeur de Tramain : [(Lamballe, 13601.6); ]
+
+Pontivy : [(Loudéac, 26097.1); ]
+
+Caen : [(Avranches, 123006); ]
+
+Pornic : [(Villeneuve-en-Retz, 19360.3); ]
+
+Carhaix : [(Morlaix, 44191.9); ]
+
+Fougères : [(Vitré, 25913.1); ]
+
+Brest : [(Guipavas Aéroport, 9429.68); ]
+
+Marans : [(La Rochelle, 24351.6); ]
+
+La Rochelle : [(Marans, 24351.6); ]
+
+Barrage de la Rance : [(Dinard, 4530.21); (Saint Malo, 3691.91); ]
+
+Dinard : [(Barrage de la Rance, 4530.21); ]
+
+Dinan : [(Mesnil Roc'h, 15379.5); ]
+
+Saint Malo : [(Barrage de la Rance, 3691.91); ]
+
+Ancenis : [(Cholet, 48572); (Porte des Sorinières, 43249.9); ]
+
+Cholet : [(Ancenis, 48572); (Angers, 58500.3); ]
+
+Chateaulin : [(Quimper, 22373); ]
+
+Daoulas : [(Pont de l'Iroise, 16405.3); ]
+
+Quimperlé : [(Lorient, 24516.3); ]
+
+Rennes : [(Mesnil Roc'h, 43587.9); ]
+
+Pont de l'Iroise : [(Guipavas Aéroport, 6094.93); (Daoulas, 16405.3); ]
+
+Lannion : [(Saint Michel-en-Grève, 13410); ]
+
+Saint Michel-en-Grève : [(Lannion, 13410); ]
+
+Redon : [(Pontchateau, 23739.2); ]
+
+Saint Pol de Léon : [(Roscoff, 4576.46); (Pont de la Corde, 5961.51); ]
+
+Mesnil Roc'h : [(Rennes, 43587.9); (Dinan, 15379.5); (Echangeur de la Chesnaie, 12984.5); ]
+
+Pontchateau : [(Savenay, 20173.4); (Redon, 23739.2); (Pont de Saint Nazaire, 19012.6); (Pont du Morbihan, 25150.7); ]
+
+Savenay : [(Pontchateau, 20173.4); ]
+
+Pontorson : [(Pontaubault, 20422); ]
+
+Ploermel : [(Pont du Morbihan, 45879.6); ]
+
+Saint Brieuc : [(Yffiniac, 10192); ]
+
+Villeneuve-en-Retz : [(Pornic, 19360.3); ]
+
+Auray : [(Vannes, 24685.8); ]
+
+Vitré : [(Laval, 49269.2); (Fougères, 25913.1); ]
+
+Avranches : [(Pontaubault, 6459.77); (Caen, 123006); ]
+
+Pont du Morbihan : [(Ploermel, 45879.6); (Pontchateau, 25150.7); ]
+
+Yffiniac : [(Saint Brieuc, 10192); ]
+
+Vannes : [(Auray, 24685.8); ]
+
+Pontaubault : [(Pontorson, 20422); (Avranches, 6459.77); ]
+
+Hennebont : [(Lorient, 10933.7); ]
+
+Pont de Saint Nazaire : [(Pontchateau, 19012.6); ]
+
+Guipavas Aéroport : [(Pont de l'Iroise, 6094.93); (Brest, 9429.68); ]
+
+Paimpol : [(Guingamp, 26657.1); ]
+
+Pont de la Corde : [(Saint Pol de Léon, 5961.51); (Morlaix, 15746.5); ]
+
+Lorient : [(Quimperlé, 24516.3); (Hennebont, 10933.7); ]
+
+Guingamp : [(Paimpol, 26657.1); ]
+
+Laval : [(Vitré, 49269.2); ]
+
+Quimper : [(Pont L'Abbé, 20033.3); (Chateaulin, 22373); ]
+
+Porte des Sorinières : [(Nantes, 6637.54); (Ancenis, 43249.9); (La Roche sur Yon, 57000.5); ]
+
+Pont L'Abbé : [(Quimper, 20033.3); ]
+
+Roscoff : [(Saint Pol de Léon, 4576.46); ]
+
+Nantes : [(Porte des Sorinières, 6637.54); ]
