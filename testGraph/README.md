@@ -32,3 +32,31 @@ Guipavas Aéroport
 "Test2"
 graph.getShortestPath("Brest", "Marans");
 output: -2147483648
+
+
+## Code Python pour générer la ralation visuelle du graph
+```py
+import networkx as nx
+import matplotlib.pyplot as plt
+
+# Read edges from a text file
+filename = "closestMapOutput.txt"
+
+G = nx.Graph()
+edges = []
+with open(filename, "r") as file:
+    for line in file:
+        node1, node2 = map(str.strip, line.split(","))
+        edges.append((node1, node2))
+
+# Define edges based on input
+
+# Create a graph
+G = nx.Graph()
+G.add_edges_from(edges)
+
+# Draw the graph
+plt.figure(figsize=(12, 9))
+nx.draw(G, with_labels=True, node_color="lightblue", edge_color="black", node_size=80, font_size=0)
+plt.show()
+```
