@@ -77,7 +77,7 @@ int Graph::findWaypointIndex(const Waypoint& wp) {
  * @param end The destination waypoint.
  * @return A vector of indices representing the shortest path.
  */
-std::vector<int> Graph::findShortestPath(const Waypoint& start, const Waypoint& end) {
+std::vector<int> Graph::getShortestPath(const Waypoint& start, const Waypoint& end) {
     std::unordered_map<std::string, double> distances; // Stores shortest known distance to each waypoint
     std::unordered_map<std::string, std::string> previous; // Stores previous waypoint in shortest path
     std::priority_queue<std::pair<double, std::string>, std::vector<std::pair<double, std::string>>, std::greater<std::pair<double, std::string>>> pq;

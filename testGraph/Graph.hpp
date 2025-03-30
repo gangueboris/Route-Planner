@@ -33,9 +33,10 @@ class Graph {
       }
       ~Graph(){}
 
-      std::vector<int> findShortestPath(const Waypoint& start, const Waypoint& end);
+      std::vector<int> getShortestPath(const Waypoint& start, const Waypoint& end);
       void visualizePath(const std::vector<int>& path);
       int getPrecision() {return precision;}
+      double getDistance(const Waypoint& wp1, const Waypoint& wp2) {return this->calculateDistance(wp1, wp2);}
       void setPrecision(double new_precision) {precision = new_precision;}
       void adjacencyListToEdgeListFile(const std::unordered_map<std::string, std::vector<std::pair<std::string, double>>>& adjacencyList, const std::string& filename);
       std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> getAdjacencyList() {return this->adjacencyList;}
