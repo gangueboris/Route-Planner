@@ -11,10 +11,6 @@ class  Waypoint{
        // Constructor
        Waypoint() : nom(""), lon(0.0), lat(0.0) {} // Default constructor
         Waypoint(std::string nom, float lon = 0, float lat = 0) : nom(nom), lon(lon), lat(lat) {}
-
-        bool operator<(const Waypoint& other) const {return nom < other.nom;}
-
-        bool operator==(const Waypoint& other) const {return nom == other.nom;}
        
        // Destructor
        ~Waypoint(){}

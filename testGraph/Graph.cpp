@@ -1,145 +1,187 @@
 #include "Graph.hpp"
 
-// return the distance between two waypoints
-double Graph::getDistance(Waypoint A, Waypoint B) {
-    std::pair<double, double> ACoords = this->latLonToMercator(A.getLatitude(), A.getLongitude());
-    std::pair<double, double> BCoords = this->latLonToMercator(B.getLatitude(), B.getLongitude());
+/**
+ * @brief Calculates the great-circle distance between two geographical points using the Haversine formula.
+ * 
+ * @param wp1 The first waypoint containing latitude and longitude.
+ * @param wp2 The second waypoint containing latitude and longitude.
+ * @return The distance between the two points in kilometers.
+ */
+double Graph::calculateDistance(const Waypoint& wp1, const Waypoint& wp2) {
+    // Convert latitude and longitude from degrees to radians
+    double lat1 = wp1.getLatitude() * M_PI / 180.0;
+    double lon1 = wp1.getLongitude() * M_PI / 180.0;
+    double lat2 = wp2.getLatitude() * M_PI / 180.0;
+    double lon2 = wp2.getLongitude() * M_PI / 180.0;
 
-    return std::sqrt(std::pow(ACoords.first - BCoords.first, 2) + std::pow(ACoords.second - BCoords.second, 2));
+    // Compute differences between the coordinates
+    double dLat = lat2 - lat1;
+    double dLon = lon2 - lon1;
+
+    // Apply the Haversine formula
+    double a = sin(dLat / 2.0) * sin(dLat / 2.0) + cos(lat1) * cos(lat2) * sin(dLon / 2.0) * sin(dLon / 2.0);
+    double c = 2.0 * atan2(sqrt(a), sqrt(1.0 - a));
+    
+    // Define Earth's radius in kilometers
+    const int earthRadius = 6378;
+    
+    // Compute and return the distance
+    return earthRadius * c;
 }
 
-// Function to convert lat/lon to Mercator (x, y)
-std::pair<double, double> Graph::latLonToMercator(float lat, float lon) {
-    const double R = 6378137.0; // Earth's radius in meters
 
-    double x = R * lon * M_PI / 180.0;
-    double y = R * log(tan(M_PI / 4.0 + (lat * M_PI / 180.0) / 2.0));
-    return {x, y};
-}
+/**
+ * @brief Creates an adjacency list representing a sparse graph.
+ * 
+ * This function connects waypoints if the distance between them is within a given threshold.
+ * 
+ * @return void
+ */
+void Graph::createAdjacencyList() {
+    double maxDistance = this->precision;
 
-std::unordered_map<std::string, std::string> Graph::mapClosestWaypoints() {
-    std::unordered_map<std::string, std::string> closestMap;
-
-    for (const auto& A : this->waypoints) {
-        double minDist = std::numeric_limits<double>::infinity();
-        std::string nearestNeighbor;
-
-        for (const auto& B : this->waypoints) {
-            if (A.getNom() != B.getNom()) {
-                double currDist = getDistance(A, B);
-                if (currDist < minDist) {
-                    minDist = currDist;
-                    nearestNeighbor = B.getNom();
-                }
+    for (int i = 0; i < (int)waypoints.size(); ++i) {
+        for (int j = i + 1; j < (int)waypoints.size(); ++j) {
+            // Compute the distance between two waypoint in km
+            double dist = calculateDistance(waypoints[i], waypoints[j]);
+            if (dist <= maxDistance) {
+                // Add bidirectional edges for an undirected graph
+                adjacencyList[waypoints[i].getNom()].push_back({waypoints[j].getNom(), dist});
+                adjacencyList[waypoints[j].getNom()].push_back({waypoints[i].getNom(), dist});
             }
         }
-        closestMap[A.getNom()] = nearestNeighbor;
     }
-    return closestMap;
 }
 
-/*std::unordered_map<std::string, std::vector<std::string>> Graph::createAdjacencyList() {
-    std::unordered_map<std::string, std::vector<std::string>> adjacencyList;
-    std::unordered_map<std::string, std::string> closestMap = this->mapClosestWaypoints();
 
-    for (const auto& pair : closestMap) {
-        const std::string& waypoint = pair.first;
-        const std::string& closest = pair.second;
-
-        if (waypoint != closest) { // Prevent self-loop
-            adjacencyList[waypoint].push_back(closest);
-            adjacencyList[closest].push_back(waypoint);
+/**
+ * @brief Finds the index of a waypoint in the waypoints list.
+ * 
+ * @param wp The waypoint to search for.
+ * @return The index of the waypoint if found, otherwise -1.
+ */
+int Graph::findWaypointIndex(const Waypoint& wp) {
+    for (int i = 0; i < (int)waypoints.size(); ++i) {
+        if (waypoints[i].getNom() == wp.getNom()) {
+            return i;
         }
     }
-    return adjacencyList;
-}*/
+    return -1; // Not found
+}
 
-// Dijkstra's algorithm to find the shortest path
-std::pair<std::vector<std::string>, double> Graph::getShortestPath(const std::string& start, const std::string& end) {
-    std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> graph = this->createWeightedAdjacencyList();
-    std::unordered_map<std::string, double> distances;
-    std::unordered_map<std::string, std::string> previous_nodes;
-    std::priority_queue<pnode, std::vector<pnode>, std::greater<pnode>> pq;
 
-    if (graph.find(start) == graph.end() || graph.find(end) == graph.end()) {
-        return {{}, std::numeric_limits<double>::infinity()}; // Start or end node not found
+/**
+ * @brief Implements Dijkstra's algorithm to find the shortest path between two waypoints.
+ * 
+ * @param start The starting waypoint.
+ * @param end The destination waypoint.
+ * @return A vector of indices representing the shortest path.
+ */
+std::vector<int> Graph::findShortestPath(const Waypoint& start, const Waypoint& end) {
+    std::unordered_map<std::string, double> distances; // Stores shortest known distance to each waypoint
+    std::unordered_map<std::string, std::string> previous; // Stores previous waypoint in shortest path
+    std::priority_queue<std::pair<double, std::string>, std::vector<std::pair<double, std::string>>, std::greater<std::pair<double, std::string>>> pq;
+
+    // Initialize all distances to infinity
+    for (const auto& wp : waypoints) {
+        distances[wp.getNom()] = std::numeric_limits<double>::infinity();
     }
-
-    for (const auto& node : graph) {
-        distances[node.first] = std::numeric_limits<double>::infinity();
-    }
-    distances[start] = 0;
-
-    pq.push({0, start});
+    distances[start.getNom()] = 0;
+    pq.push({0, start.getNom()}); // Start processing from the initial waypoint
 
     while (!pq.empty()) {
-        double curr_dist = pq.top().first;
-        std::string curr_node = pq.top().second;
+        std::string current = pq.top().second; // Get waypoint with the shortest known distance
+        double currentDist = pq.top().first;
         pq.pop();
 
-        if (curr_node == end) {
-            break;
+        // Ignore outdated distance calculations
+        if (currentDist > distances[current]) {
+            continue;
         }
 
-        for (const auto& [neighbor, edge_weight] : graph[curr_node]) {
-            double new_dist = curr_dist + edge_weight;
-            if (new_dist < distances[neighbor]) {
-                distances[neighbor] = new_dist;
-                previous_nodes[neighbor] = curr_node;
-                pq.push({new_dist, neighbor});
+        // Explore neighbors of the current waypoint
+        for (const auto& neighbor : adjacencyList[current]) {
+            double newDist = distances[current] + neighbor.second; // Calculate potential shorter path
+            if (newDist < distances[neighbor.first]) {
+                distances[neighbor.first] = newDist; // Update shortest distance
+                previous[neighbor.first] = current; // Store path information
+                pq.push({newDist, neighbor.first}); // Push updated distance to the queue
             }
         }
     }
 
-    if (distances[end] == std::numeric_limits<double>::infinity()) {
-        return {{}, std::numeric_limits<double>::infinity()}; // No path found
+    std::vector<int> pathIndices;
+    std::string current = end.getNom();
+    
+    // Reconstruct the shortest path by backtracking from the destination
+    while (previous.find(current) != previous.end()) {
+        pathIndices.push_back(findWaypointIndex(Waypoint(current)));
+        current = previous[current];
     }
-
-    std::vector<std::string> path;
-    std::string node = end;
-    while (node != start) {
-        path.push_back(node);
-        node = previous_nodes[node];
-    }
-    path.push_back(start); // Add the start node
-    std::reverse(path.begin(), path.end());
-
-    return {path, distances[end]};
+    
+    // Add the start waypoint to the path
+    pathIndices.push_back(findWaypointIndex(Waypoint(start.getNom())));
+    std::reverse(pathIndices.begin(), pathIndices.end()); // Reverse to get correct order
+    return pathIndices;
 }
 
-
-bool Graph::alreadyExists(const std::vector<std::pair<std::string, double>>& list, const std::string& target) {
-    return std::any_of(list.begin(), list.end(), [&](const auto& pair) {
-        return pair.first == target;
-    });
+/**
+ * @brief Visualizes the shortest path by printing it to the console.
+ * 
+ * @param path A vector of waypoint indices representing the path.
+ * @return void
+ */
+void Graph::visualizePath(const std::vector<int>& path) {
+    std::cout << "Shortest Path:\n";
+    for (int i = 0; i < (int)path.size(); ++i) {
+        int index = path[i];
+        if (index >= 0 && index < (int)waypoints.size()) {
+            std::cout << waypoints[index].getNom();
+            if (i < (int)path.size() - 1) {
+                std::cout << " => ";
+            }
+        } else {
+            std::cout << "Invalid index in path." << std::endl;
+        }
+    }
+    std::cout << std::endl;
 }
 
-std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> Graph::createWeightedAdjacencyList() {
-    std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> adjacencyList;
-    std::unordered_map<std::string, std::string> closestMap = this->mapClosestWaypoints();
+/**
+ * @brief Converts the adjacency list representation of a graph into an edge list and writes it to a file.
+ * 
+ * This method takes an adjacency list, where each node is mapped to a list of its neighbors, 
+ * and writes each edge (source, destination) into a specified file.
+ * 
+ * @param adjacencyList An unordered_map where the key is a node (represented as a string) and the value is a vector
+ *                      of pairs, each containing a neighboring node (string) and the edge weight (double).
+ * @param filename The name of the file where the edge list will be written.
+ * @return void
+ */
+void Graph::adjacencyListToEdgeListFile(const std::unordered_map<std::string, std::vector<std::pair<std::string, double>>>& adjacencyList, const std::string& filename) {
+    // Open the output file for writing the edge list
+    std::ofstream outputFile(filename);
 
-    for (const auto& [waypoint, closest] : closestMap) {
-        // Get distance between two waypoints, firstly, by search a waypoint by name
-        double distance = getDistance(
-            *std::find_if(waypoints.begin(), waypoints.end(), [&](const Waypoint& wp) { return wp.getNom() == waypoint; }),
-            *std::find_if(waypoints.begin(), waypoints.end(), [&](const Waypoint& wp) { return wp.getNom() == closest; })
-        );
+    // Check if the file was opened successfully
+    if (!outputFile.is_open()) {
+        std::cerr << "Error: Unable to open file " << filename << std::endl;
+        return;
+    }
 
-        if (!alreadyExists(adjacencyList[waypoint], closest)) {
-            adjacencyList[waypoint].emplace_back(closest, distance);
-        }
-        if (!alreadyExists(adjacencyList[closest], waypoint)) {
-            adjacencyList[closest].emplace_back(waypoint, distance);
+    // Iterate through each node in the adjacency list
+    for (const auto& pair : adjacencyList) {
+        std::string source = pair.first; // Get the source node
+        // Iterate through the neighbors of the source node
+        for (const auto& neighbor : pair.second) {
+            std::string destination = neighbor.first; // Get the destination node
+            // Write the edge (source, destination) to the file
+            outputFile << source << ", " << destination << std::endl;
         }
     }
 
-    // Affichage
-    /*for (auto& [node, vect] : adjacencyList) {
-        std::cout << node << " : [";
-        for (auto& [neighbour, weight] : vect) {
-            std::cout << "(" << neighbour << ", " << weight << "); ";
-        }
-        std::cout << "]\n\n";
-    }*/
-    return adjacencyList;
+    // Close the output file after writing the edges
+    outputFile.close();
+    
+    // Print a confirmation message indicating the edge list has been written
+    std::cout << "Edge list written to " << filename << std::endl;
 }

@@ -1,8 +1,8 @@
-# include "Graph.hpp"
+#include "Graph.hpp"
 #include <iostream>
 
 int main() {
-    const std::vector<Waypoint> testWaypoints = {
+    std::vector<Waypoint> waypoints = {
         {"Ancenis", 47.37333, -1.18194},
         {"Angers", 47.47361, -0.55417},
         {"Auray", 47.66861, -2.98139},
@@ -61,25 +61,17 @@ int main() {
         {"Vitré", 48.12000, -1.21000},
         {"Yffiniac", 48.48039, -2.68006}
     };
-    
-    // init the Graph
-    Graph graph(testWaypoints);
 
-    // ====================== Test of Create Adjacency List ====================
-    /*std::unordered_map<std::string, std::string> adjacencyList = graph.createAdjacencyList();
-    for (auto& adj : adjacencyList) {
-        std::cout << adj.first << ", " << adj.second << "\n";
-    }
-    */
+    Graph graph(waypoints);
 
-    // ====================== Test of Djisktra algorithm ====================
-    std::pair<std::vector<std::string>, int> shortPath = graph.getShortestPath("Brest", "Marans");
-    std::cout << shortPath.second << "\n\n";
-    for(auto& city : shortPath.first) {
-        std::cout << city << "\n\n";
-    }
+    Waypoint start("Brest");
+    Waypoint end("Saint Brieuc");
 
-   
+    std::vector<int> path = graph.findShortestPath(start, end);
+    graph.visualizePath(path);
+
+    std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> adjacencyList = graph.getAdjacencyList();
+    graph.adjacencyListToEdgeListFile(adjacencyList, "edgeList.txt");
 
     return 0;
 }

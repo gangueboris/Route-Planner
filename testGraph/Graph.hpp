@@ -1,6 +1,18 @@
+/**
+ * @class Graph
+ * @brief Represents a graph of waypoints and provides pathfinding functionality.
+ *
+ * This class manages a set of waypoints, constructs an adjacency list,
+ * and implements Dijkstra's algorithm to find the shortest path between waypoints.
+ * It also includes a visualization method to display the computed paths.
+ *
+ * @author Boris Gangue
+ * @date March 30, 2025
+ */
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <fstream>
 #include <iostream>
 #include <vector>
 #include <unordered_map>
@@ -9,40 +21,33 @@
 #include <algorithm>
 #include <climits>
 #include <cmath>
+#include <iomanip>
 
 #include "Route.hpp"
 #include "Waypoint.hpp"
 
-typedef std::pair<double, std::string> pnode;  // Pair of distance and node
-
 class Graph {
-public:
-   // Constructor
-   Graph(std::vector<Waypoint> waypoints_init) : waypoints{waypoints_init} {}
+   public:
+      Graph(std::vector<Waypoint> waypoints_init, double precision_init = 70) : waypoints{waypoints_init}, precision{precision_init}{
+         createAdjacencyList();
+      }
+      ~Graph(){}
 
-   // Destructor
-   ~Graph() {}
-
-   double getDistance(Waypoint A, Waypoint B);
-   std::pair<std::vector<std::string>, double> getShortestPath(const std::string& start, const std::string& end);
-
-
-private:
-   // Helper method to convert (lat, lon) => (x, y)
-   std::pair<double, double> latLonToMercator(float lat, float lon);
-
-   // It maps a waypoint to it closest one. Mapping by string (name) instead of by Waypoint to have an easy data manipulation.
-   std::unordered_map<std::string, std::string> mapClosestWaypoints();
-
-   // Create a mapping list
-   //std::unordered_map<std::string, std::vector<std::string>> createAdjacencyList();
-
-   std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> createWeightedAdjacencyList();
-   bool alreadyExists(const std::vector<std::pair<std::string, double>>& list, const std::string& target);
-
-   std::vector<Waypoint> waypoints;
-
+      std::vector<int> findShortestPath(const Waypoint& start, const Waypoint& end);
+      void visualizePath(const std::vector<int>& path);
+      int getPrecision() {return precision;}
+      void setPrecision(double new_precision) {precision = new_precision;}
+      void adjacencyListToEdgeListFile(const std::unordered_map<std::string, std::vector<std::pair<std::string, double>>>& adjacencyList, const std::string& filename);
+      std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> getAdjacencyList() {return this->adjacencyList;}
+      
+   private:
+      std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> adjacencyList;
+      std::vector<Waypoint> waypoints;
+      double precision;
+      
+      void createAdjacencyList();
+      double calculateDistance(const Waypoint& wp1, const Waypoint& wp2);
+      int findWaypointIndex(const Waypoint& wp);
 };
-#endif
 
- 
+#endif

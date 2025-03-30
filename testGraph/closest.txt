@@ -1,0 +1,57 @@
+Yffiniac, Saint Brieuc
+Savenay, Pontchateau
+Saint Pol de Léon, Roscoff
+Saint Michel-en-Grève, Lannion
+Saint Brieuc, Yffiniac
+Rennes, Mesnil Roc'h
+Redon, Pontchateau
+Quimperlé, Lorient
+Pontorson, Pontaubault
+Pontchateau, Pont de Saint Nazaire
+Vannes, Auray
+Pontaubault, Avranches
+Pont de l'Iroise, Guipavas Aéroport
+Ploermel, Pont du Morbihan
+Paimpol, Guingamp
+Roscoff, Saint Pol de Léon
+Pont L'Abbé, Quimper
+Nantes, Porte des Sorinières
+Daoulas, Pont de l'Iroise
+Chateaulin, Quimper
+Cholet, Ancenis
+Dinard, Barrage de la Rance
+Quimper, Pont L'Abbé
+Porte des Sorinières, Nantes
+Laval, Vitré
+Barrage de la Rance, Saint Malo
+La Rochelle, Marans
+Brest, Guipavas Aéroport
+Vitré, Fougères
+Pont du Morbihan, Pontchateau
+Avranches, Pontaubault
+Lannion, Saint Michel-en-Grève
+Villeneuve-en-Retz, Pornic
+Auray, Vannes
+Pontivy, Loudéac
+Echangeur de Tramain, Lamballe
+Angers, Cholet
+Pornic, Villeneuve-en-Retz
+Caen, Avranches
+Saint Malo, Barrage de la Rance
+Dinan, Mesnil Roc'h
+Ancenis, Porte des Sorinières
+Echangeur de la Chesnaie, Mesnil Roc'h
+Carhaix, Morlaix
+Fougères, Vitré
+Guipavas Aéroport, Pont de l'Iroise
+Pont de Saint Nazaire, Pontchateau
+Hennebont, Lorient
+Pont de la Corde, Saint Pol de Léon
+Guingamp, Paimpol
+Lorient, Hennebont
+La Roche sur Yon, Porte des Sorinières
+Mesnil Roc'h, Echangeur de la Chesnaie
+Lamballe, Echangeur de Tramain
+Marans, La Rochelle
+Loudéac, Pontivy
+Morlaix, Pont de la Corde

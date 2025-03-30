@@ -121,7 +121,7 @@ eg.
  * It provides efficient operations and supports saving/loading from a file.
  *
  * @author Boris Gangue
- * @date March 21, 2025
+ * @date March 30, 2025
  */
 class ContactManager {
 public:
