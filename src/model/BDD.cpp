@@ -86,4 +86,3 @@ void BDD::readWaypointsFromDb(std::vector<Waypoint> & waypoint){
 		waypoint.push_back(Waypoint(nom,lat,lon));
 	}
 };
-
