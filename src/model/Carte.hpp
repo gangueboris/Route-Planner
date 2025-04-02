@@ -15,6 +15,7 @@ class Carte {
        // Constructor
        Carte(Contour contour_init,std::vector<Route> routes_init, std::vector<Ville> villes_init, std::vector<Waypoint> waypoints_init): contour(contour_init), routes(routes_init), villes(villes_init), waypoints(waypoints_init) {}
        
+
        // Destructor
        ~Carte(){};
        

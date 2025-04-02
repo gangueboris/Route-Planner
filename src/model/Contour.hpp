@@ -27,7 +27,7 @@
  
          /*Member Function*/
          std::vector<Point> getPoints(){return contour;}
-         void ajoutUnPoint(Point p);
+         //void ajoutUnPoint(Point p);
 
     private : 
         std::vector<Point> contour;

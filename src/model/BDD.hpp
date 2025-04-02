@@ -23,11 +23,11 @@ class BDD {
 		~BDD();
 
 		/*Member Function*/
-		void readContourFromDb(Contour &Contour);
+		/*void readContourFromDb(Contour &Contour);
 		void readRouteFromDb(std::vector<Route> & route);
 		void readVilleFromDb(std::vector<Ville> & ville);
-		void readWaypointsFromDb(std::vector<Waypoint> & waypoint);
-		Carte getCarte(){return carte;}
+		void readWaypointsFromDb(std::vector<Waypoint> & waypoint);*/
+		//Carte getCarte(){return carte;};
 
 
 	private :
