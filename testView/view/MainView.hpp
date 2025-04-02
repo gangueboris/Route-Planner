@@ -84,8 +84,10 @@ class MainView : public QGraphicsView {
 			painter->drawLine(x1,y1,x2,y2);
 			painter->drawLine(x1,y1-longueur_tick,x1,y1+longueur_tick);
 			painter->drawLine(x2,y2-longueur_tick,x2,y2+longueur_tick);
+			
 			QRectF rect_texte(x1, y1-30, x2-x1-30, 20 );
 			painter->drawText(rect_texte, Qt::AlignCenter|Qt::TextDontClip,"10 km");
+
 			painter->setWorldMatrixEnabled(true);
 			//painter->restore();  // pas utile
 		}

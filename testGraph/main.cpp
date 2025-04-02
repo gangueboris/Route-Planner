@@ -65,13 +65,13 @@ int main() {
     Graph graph(waypoints);
 
     Waypoint start("Brest");
-    Waypoint end("Rennes");
+    Waypoint end("Saint Brieuc");
 
-    std::vector<int> path = graph.getShortestPath(start, end);
+    std::vector<int> path = graph.findShortestPath(start, end);
     graph.visualizePath(path);
 
     std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> adjacencyList = graph.getAdjacencyList();
-    //graph.adjacencyListToEdgeListFile(adjacencyList, "edgeList.txt");
+    graph.adjacencyListToEdgeListFile(adjacencyList, "edgeList.txt");
 
     return 0;
 }
