@@ -6,8 +6,8 @@
 // Includes MODEL
 #include <cppconn/exception.h>
 #include "model/Carte.hpp"
-//#include "model/BDD.hpp"
-//#include "model/SceneCarte.hpp"
+#include "model/BDD.hpp"
+#include "model/SceneCarte.hpp"
 
 // Include MAINWINDOW
 #include "view/MainWindow.hpp"
@@ -24,24 +24,18 @@ int main(int argc, char **argv) {
 
     // Récupération des saisies après fermeture de la Dialog box
     dlg.getResult(host, base, user, pwd);
-    std::cout << "Lecture base plans" << std::endl;
-    */
-    std::vector<Point> pointList;
-    Contour contour_init(pointList);
-    std::vector<Route> routes_init;
-    std::vector<Ville> villes_init;
-    std::vector<Waypoint> waypoints_init;
+    std::cout << "Lecture " << std::endl;*/
+    Carte carte;
 
-    Carte carte(contour_init, routes_init, villes_init, waypoints_init);
-
-    /*try {
+    try {
         // Connect to the database
-        BDD bdd("tcp://localhost:3306", "plans", "architectUI", "admin1234");
+        BDD bdd("tcp://localhost:3306", "routeplanner", "routePlanner", "azerty1234");
         //BDD bdd("tcp://"+host+":3306", base, user, pwd);
 
-        // Get the plan
-        plan = bdd.getPlan(1);
-        plan.affiche();
+        // Get the Carte
+        carte = bdd.getCarte();
+    
+        std::cout << "Successfully get the map !! \n";
 
     } catch (sql::SQLException &e) {
         std::cout << "Erreur MySQL. Sortie de l'application\n";
@@ -49,7 +43,7 @@ int main(int argc, char **argv) {
         e.what());
         msg.exec();
         return 1;
-    }*/
+    }
     
     MainWindow mw(carte);
     mw.show();

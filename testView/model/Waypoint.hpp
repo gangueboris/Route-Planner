@@ -11,6 +11,8 @@ class  Waypoint{
        // Constructor
        Waypoint(std::string nom="", float lon=0.0, float lat=0.0) : nom(nom), lon(lon), lat(lat) {}
        
+       Waypoint(){}
+       
        // Destructor
        ~Waypoint(){}
        

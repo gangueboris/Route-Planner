@@ -16,7 +16,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -g -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++
 QMAKE         = /usr/bin/qmake
 DEL_FILE      = rm -f
@@ -40,7 +40,7 @@ DISTNAME      = testView1.0.0
 DISTDIR = /mnt/c/XXX_CIR_2_XXX/SEMESTRE_4/C++/Route-Planner/testView/.tmp/testView1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath-link,/usr/lib/x86_64-linux-gnu
-LIBS          = $(SUBLIBS) /usr/lib/x86_64-linux-gnu/libQt6Widgets.so /usr/lib/x86_64-linux-gnu/libQt6Gui.so /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so /usr/lib/x86_64-linux-gnu/libQt6Core.so -lpthread -lGLX -lOpenGL   
+LIBS          = $(SUBLIBS) model/libBDD.a -lmysqlcppconn /usr/lib/x86_64-linux-gnu/libQt6Widgets.so /usr/lib/x86_64-linux-gnu/libQt6Gui.so /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so /usr/lib/x86_64-linux-gnu/libQt6Core.so -lpthread -lGLX -lOpenGL   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -53,6 +53,7 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
+		model/BDD.cpp \
 		model/Graph.cpp \
 		model/SceneCarte.cpp \
 		view/LoginDialog.cpp \
@@ -62,6 +63,7 @@ SOURCES       = main.cpp \
 		moc_MainWindow.cpp \
 		moc_MiniView.cpp
 OBJECTS       = main.o \
+		BDD.o \
 		Graph.o \
 		SceneCarte.o \
 		LoginDialog.o \
@@ -138,7 +140,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/lex.prf \
-		testView.pro model/Carte.hpp \
+		testView.pro model/BDD.hpp \
+		model/Carte.hpp \
 		model/Contour.hpp \
 		model/Graph.hpp \
 		model/Point.hpp \
@@ -150,6 +153,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/spec_pre.prf \
 		view/MainView.hpp \
 		view/MainWindow.hpp \
 		view/MiniView.hpp main.cpp \
+		model/BDD.cpp \
 		model/Graph.cpp \
 		model/SceneCarte.cpp \
 		view/LoginDialog.cpp \
@@ -323,8 +327,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents model/Carte.hpp model/Contour.hpp model/Graph.hpp model/Point.hpp model/Route.hpp model/SceneCarte.hpp model/Ville.hpp model/Waypoint.hpp view/LoginDialog.hpp view/MainView.hpp view/MainWindow.hpp view/MiniView.hpp $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp model/Graph.cpp model/SceneCarte.cpp view/LoginDialog.cpp view/MainWindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents model/BDD.hpp model/Carte.hpp model/Contour.hpp model/Graph.hpp model/Point.hpp model/Route.hpp model/SceneCarte.hpp model/Ville.hpp model/Waypoint.hpp view/LoginDialog.hpp view/MainView.hpp view/MainWindow.hpp view/MiniView.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp model/BDD.cpp model/Graph.cpp model/SceneCarte.cpp view/LoginDialog.cpp view/MainWindow.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -354,7 +358,7 @@ compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp
-	g++ -pipe -O2 -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp
+	g++ -pipe -g -O2 -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp
 
 compiler_moc_header_make_all: moc_SceneCarte.cpp moc_LoginDialog.cpp moc_MainView.cpp moc_MainWindow.cpp moc_MiniView.cpp
 compiler_moc_header_clean:
@@ -446,6 +450,15 @@ main.o: main.cpp view/LoginDialog.hpp \
 		model/Graph.hpp \
 		view/MiniView.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+BDD.o: model/BDD.cpp model/BDD.hpp \
+		model/Point.hpp \
+		model/Carte.hpp \
+		model/Waypoint.hpp \
+		model/Route.hpp \
+		model/Contour.hpp \
+		model/Ville.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o BDD.o model/BDD.cpp
 
 Graph.o: model/Graph.cpp model/Graph.hpp \
 		model/Route.hpp \

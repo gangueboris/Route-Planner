@@ -17,7 +17,7 @@ int main (){
     user = "routePlanner";
     pwd = "azerty1234";
     try {
-        BDD BDD("tcp://"+host+":3306",base,user,pwd);
+        BDD("tcp://"+host+":3306",base,user,pwd);
     }
     catch (sql::SQLException &e){
         std::cout << "Erreur MYSQL, sortie du programme\n";

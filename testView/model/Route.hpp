@@ -9,7 +9,7 @@ class Route {
     public:
        // Constructor
        Route(int i_debut = 0, int i_fin = 0, int distance = 0) : i_debut(i_debut), i_fin(i_fin), distance(distance) {}
-       
+       Route(){}
        // Destructor
        ~Route(){};
        

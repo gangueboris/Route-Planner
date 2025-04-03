@@ -10,8 +10,8 @@ MainWindow::MainWindow(Carte& carte) : carte(carte) {
 	this->setCentralWidget(this->mainWidget);
     
     // Init the windows size
-    this->width= 600; 
-	this->height = 400;
+    this->width= 700; 
+	this->height = 500;
 	setMinimumSize(this->width, this->height);
 	
 	this->sceneCarte = new SceneCarte(carte);
