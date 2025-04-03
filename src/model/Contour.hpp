@@ -23,6 +23,7 @@
     public :
          /*Destructor and Constructor*/
          Contour(std::vector<Point> contour_init): contour{contour_init}{}
+         Contour(){}
          ~Contour(){};
  
          /*Member Function*/
