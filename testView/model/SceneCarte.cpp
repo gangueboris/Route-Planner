@@ -7,7 +7,7 @@ SceneCarte::SceneCarte(Carte & carte) {
 }
       
 void SceneCarte::drawContour(Contour contour) {
-
+   
 }
 void SceneCarte::drawRoute(Route route) {
 
