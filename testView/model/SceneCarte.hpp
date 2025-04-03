@@ -24,11 +24,12 @@ public :
        void drawRoute(Route route);
        void drawWaypoint(std::vector<Waypoint> waypoints);
        void drawShortestPath(std::vector<Route> routes);
-
+       int getDistance();
        
 private:
        static std::map<std::string, QColor> tabColors;
        void latLonToXY(float lon, float lat, double &x, double &y);
+       Graph graph;
 };
 
 #endif

@@ -1,6 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include <cmath> 
 #include <QMainWindow> // Already include QWidgets
 #include <QGraphicsView>
 #include <QApplication>
@@ -54,6 +54,9 @@ class MainWindow: public QMainWindow {
 
         // Methods
         QGroupBox* createGroupBoxInfos();
+        std::string decimalToDMS(double decimal, char positive, char negative);
+        void xyToLatLon(double x, double y, float &lon, float &lat);
+        
     
 };
 

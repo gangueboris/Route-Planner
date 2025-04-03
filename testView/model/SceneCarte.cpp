@@ -18,7 +18,7 @@ void SceneCarte::drawContour(Contour contour) {
 
     // Create and configure the contour item
     QGraphicsPolygonItem* contourItem = new QGraphicsPolygonItem(polygon);
-    contourItem->setPen(QPen(Qt::black, 5, Qt::SolidLine));
+    contourItem->setPen(QPen(Qt::black, 1, Qt::SolidLine));
     contourItem->setBrush(QBrush(Qt::green));   // Fill with green
    
 
@@ -52,6 +52,14 @@ void SceneCarte::latLonToXY(float lon, float lat, double &x, double &y) {
     double latRad = lat * M_PI / 180.0;
 
     // Calculate x and y using Mercator projection
-    x = EARTH_RADIUS * lonRad;
+    x = EARTH_RADIUS * lonRad ;
     y = EARTH_RADIUS * log(tan(M_PI / 4.0 + latRad / 2.0));
+
+    // conversion into km
+    x /=  1000;
+    y /= 1000;
+}
+
+int SceneCarte::getDistance() {
+    return 0;
 }
