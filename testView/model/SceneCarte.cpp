@@ -23,13 +23,41 @@ void SceneCarte::drawContour(Contour contour) {
    
 
     // Add contour to the scene
-    this->addItem(contourItem);
-    
+    this->addItem(contourItem); 
 }
 void SceneCarte::drawRoute(Route route) {
 
 }
+
+void SceneCarte::drawVille(std::vector<Ville> villes) {
+    for (auto& ville : villes) {
+        double x, y;
+        latLonToXY(ville.getLon(), ville.getLat(), x, y);
+        
+
+        // Create a small rectangle centered at (x, y)
+        QRectF rect(x - 2.5, y - 2.5, 5, 5);
+        
+        // Create and configure the rectangle item
+        QGraphicsRectItem* villeItem = new QGraphicsRectItem(rect);
+        villeItem->setPen(QPen(Qt::black, 1)); // Black border
+        villeItem->setBrush(QBrush(Qt::gray)); // Gray fill
+
+        // Add to the scene
+        this->addItem(villeItem);
+    }
+}
+
 void SceneCarte::drawWaypoint(std::vector<Waypoint> waypoints) {
+    /*
+        As arguments, I will get vector<Waypoint> and vector<Ville>.
+        - Iterate through vector<Ville> and draw small square. 
+        - To get the get the coords, I will use the getWaypoint by name. And in the tooltip, fill with the get of will. 
+        - for every ville, I will change the isVille in the Waypoint vector to true. 
+        - I have to iterate in vector<Waypoint> check if it's not Ville  and draw waypoint.
+    */
+    
+
 
 }
 void SceneCarte::drawShortestPath(std::vector<Route> routes) {

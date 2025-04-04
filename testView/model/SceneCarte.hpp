@@ -23,6 +23,7 @@ public :
        void drawContour(Contour contour);
        void drawRoute(Route route);
        void drawWaypoint(std::vector<Waypoint> waypoints);
+       void drawVille(std::vector<Ville> ville);
        void drawShortestPath(std::vector<Route> routes);
        int getDistance();
        

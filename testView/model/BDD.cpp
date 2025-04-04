@@ -64,17 +64,23 @@ void BDD::readWaypointsFromDb(std::vector<Waypoint> & waypoint){
 	}
 }
 
-void BDD::readVilleFromDb(std::vector<Ville> & ville){
-	
+void BDD::readVilleFromDb(std::vector<Ville>& ville){
 	sql::Statement *stmt = con->createStatement();
 	sql::ResultSet *res = stmt->executeQuery("SELECT nom, code_postal, nb_habitants, site FROM ville");
 
-	while(res->next()){ 
-		std::string nom = res->getString("nom");
+	while(res->next()) { 
+		std::string nom_ville = res->getString("nom");
 		std::string code_postal = res->getString("code_postal");
 		int nb_habitants = res->getInt("nb_habitants");
 		std:: string site = res->getString("site");
-		ville.push_back(Ville(nom, code_postal, nb_habitants, site));
+
+		/*
+		   - SELECT lon, lat FROM waypoint WHERE nom = nom_ville;
+		
+		   - ville.push_back(Ville(nom, code_postal, nb_habitants, site, lon, lat)); // New ville initialisation
+		*/
+
+		ville.push_back(Ville(nom_ville, code_postal, nb_habitants, site));
 	}
 }
 
