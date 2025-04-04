@@ -76,6 +76,13 @@ void BDD::readVilleFromDb(std::vector<Ville> & ville){
 		std::string code_postal = res->getString("code_postal");
 		int nb_habitants = res->getInt("nb_habitants");
 		std:: string site = res->getString("site");
+
+		/*
+		   - SELECT lon, lat FROM waypoint WHERE nom = nom_ville;
+		
+		   - ville.push_back(Ville(nom, code_postal, nb_habitants, site, lon, lat)); // New ville initialisation
+		*/
+	
 		ville.push_back(Ville(nom,code_postal,site,nb_habitants));
 	}
 };
