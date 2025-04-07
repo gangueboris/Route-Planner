@@ -30,7 +30,6 @@ class BDD {
 		void readWaypointsFromDb(std::vector<Waypoint> & waypoint);
 		Carte getCarte(){return carte;};
 
-
 	private :
 		sql::Connection *con;
 		Carte carte;

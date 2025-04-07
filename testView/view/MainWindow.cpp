@@ -10,8 +10,8 @@ MainWindow::MainWindow(Carte& carte) : carte(carte) {
 	this->setCentralWidget(this->mainWidget);
     
     // Init the windows size
-    this->width= 600; 
-	this->height = 400;
+    this->width = 900; // 900
+	this->height = 600; // 600
 	setMinimumSize(this->width, this->height);
 	
 	this->sceneCarte = new SceneCarte(carte);
@@ -20,38 +20,14 @@ MainWindow::MainWindow(Carte& carte) : carte(carte) {
     qbl_general->addWidget(createGroupBoxInfos());
 	qbl_general->addWidget(this->mainView);
 
+	this->statusBar = new QStatusBar;
+	this->setStatusBar(this->statusBar);
    
-}
-
-
-//===========================================================================================
-
-
-/*FenetrePrincipale::FenetrePrincipale(Plan &plan_init) : plan(plan_init) {
-
-	widget_general = new QWidget;
-	QHBoxLayout * qbl_general = new QHBoxLayout;
-	widget_general->setLayout(qbl_general);
-	this->setCentralWidget(widget_general);
-
-	largeur = 600; // qApp->desktop()->screenGeometry().width() / 2;
-	hauteur = 400; // qApp->desktop()->screenGeometry().height() / 2;
-	setMinimumSize(largeur,hauteur);
-
-	myscene = new ScenePlan(plan);
-	myview1 = new GrandeVue(myscene, this, plan.getOrientation());
-
-	qbl_general->addWidget(creerGroupBoxInfos());
-
-	qbl_general->addWidget(myview1);
-	barre_statut = statusBar();
 	
-	connect( myview1, &GrandeVue::coord_viewport, myview2, &MiniVue::trace_viewport);
-	connect( myview1, &GrandeVue::position, this, &FenetrePrincipale::affiche_pos_scene);
+	connect(this->mainView, &MainView::coord_viewport, this->miniView, &MiniView::trace_viewport);
+	connect(this->mainView, &MainView::position, this, &MainWindow::geoCoordsSlot);
 }
 
-FenetrePrincipale::~FenetrePrincipale() {
-}*/
 
 QGroupBox* MainWindow::createGroupBoxInfos() {
 	QGroupBox * gb = new QGroupBox;
@@ -62,7 +38,7 @@ QGroupBox* MainWindow::createGroupBoxInfos() {
     
     QLabel* startLabel = new QLabel("Departure City");
 	QLabel* arrivalLabel = new QLabel("Arrival City");
-    // QLabel* distanceLabel = new QLabel("Distance: " + this->sceneCarte->getDistance());
+    QLabel* distanceLabel = new QLabel("Distance: " + QString::fromStdString(std::to_string(this->sceneCarte->getDistance())) + " km");
 
     QLineEdit* startLineEdit = new QLineEdit;
     startLineEdit->setPlaceholderText("Departure...");
@@ -71,18 +47,55 @@ QGroupBox* MainWindow::createGroupBoxInfos() {
      
 	QPushButton* compute = new QPushButton("Go");
 	this->miniView = new MiniView(this->sceneCarte, this);
+    
 
 	vbox->addWidget(startLabel);
 	vbox->addWidget(startLineEdit);
 	vbox->addWidget(arrivalLabel);
 	vbox->addWidget(arrivalLineEdit);
 	vbox->addWidget(compute);
+	vbox->addWidget(distanceLabel);
 	vbox->addWidget(this->miniView);
 
 	return gb;
 }
 
+// Function to convert decimal degrees to D°MM.M' format
+std::string MainWindow::decimalToDMS(double decimal, char positive, char negative) {
+    char direction = (decimal >= 0) ? positive : negative;
+    decimal = std::fabs(decimal);  // Work with absolute value
+
+    int degrees = (int)decimal;  // Extract degrees
+    double minutes = (decimal - degrees) * 60;  // Convert remainder to minutes
+
+    // Format as D°MM.M'
+    char buffer[20];
+    snprintf(buffer, sizeof(buffer), "%d°%.2f'%c", degrees, minutes, direction);
+    return std::string(buffer);
+}
+
+void MainWindow::xyToLatLon(double x, double y, float &lon, float &lat) {
+    const double EARTH_RADIUS = 6378137.0; // Earth's radius in meters
+
+    // Convert km back to meters
+    x *= 1000;
+    y *= 1000;
+
+    // Compute longitude in degrees
+    lon = (x / EARTH_RADIUS) * (180.0 / M_PI);
+
+    // Compute latitude in degrees
+    lat = (2 * atan(exp(y / EARTH_RADIUS)) - M_PI / 2) * (180.0 / M_PI);
+}
+
 /*============================= SLOTS ==============================*/
 void MainWindow::geoCoordsSlot(QPointF p) {
+	float lat, lon;
+	this->xyToLatLon(p.x(), p.y(), lon, lat);
+	std::string latStr = this->decimalToDMS(lat, 'N', 'S');
+    std::string lonStr = this->decimalToDMS(lon, 'E', 'W');
+
+	QString msg = "Stage coordinates: ("+ QString::fromStdString(latStr) + ", " + QString::fromStdString(lonStr) + ")";
+	this->statusBar->showMessage(msg);
 
 }

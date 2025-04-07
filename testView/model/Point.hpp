@@ -20,6 +20,7 @@
 	 public :
 		 //Constructor and Destructor
 		 Point (int init_num, float init_lat, float init_lon): num{init_num}, lat{init_lat}, lon{init_lon} {}
+		 Point(){}
 		 ~Point (){};
  
 		 //Member fonction

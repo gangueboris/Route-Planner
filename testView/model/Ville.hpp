@@ -10,12 +10,12 @@
 class Ville : public Waypoint {
     public:
        // Constructor
-        Ville(std::string nom = "", float lon = 0.0, float lat = 0.0, std::string code_postal_init = "", int nb_habitants_init = 0, std::string site_init = "")
+        Ville(std::string nom = "", std::string code_postal_init = "", int nb_habitants_init = 0, std::string site_init = "", float lon = 0.0, float lat = 0.0)
         : Waypoint(nom, lon, lat), code_postal(code_postal_init), nb_habitants(nb_habitants_init), site(site_init) {}
-
+     
        
        // Destructor
-       ~Ville(){};
+       ~Ville(){}
        
        // Getters
         std::string getSite() const {return site;}

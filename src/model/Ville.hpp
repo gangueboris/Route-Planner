@@ -14,9 +14,11 @@ class Ville : public Waypoint {
        int nb_habitants;       
     public:
        // Constructor
-        Ville(std::string nom, std::string code_postal, std::string site, int nb_habitants): Waypoint(nom), code_postal(code_postal), site(site),  nb_habitants(nb_habitants) {};
 
-       
+        Ville(std::string nom, std::string code_postal_init, int nb_habitants_init, std::string site_init)
+        : Waypoint(nom), code_postal(code_postal_init), nb_habitants(nb_habitants_init), site(site_init) {}
+        
+
        // Destructor
        ~Ville(){};
        
