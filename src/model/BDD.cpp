@@ -80,13 +80,6 @@ void BDD::readVilleFromDb(std::vector<Ville> & ville){
 		std::string code_postal = res->getString("code_postal");
 		int nb_habitants = res->getInt("nb_habitants");
 		std:: string site = res->getString("site");
-
-		/*
-		   - SELECT lon, lat FROM waypoint WHERE nom = nom_ville;
-		
-		   - ville.push_back(Ville(nom, code_postal, nb_habitants, site, lon, lat)); // New ville initialisation
-		*/
-	
 		ville.push_back(Ville(nom,code_postal,site,nb_habitants));
 	}
 };
@@ -101,8 +94,8 @@ void BDD::readRouteFromDb(std::vector<Route> & route, std::vector<Waypoint> &way
 		std:: string nom_debut = res->getString("nom_debut");
 		std:: string nom_fin = res->getString("nom_fin");
 		int distance = res->getInt("distance");
-		int index_debut = findRouteIndex(nom_debut,waypoints);
-		int index_fin = findRouteIndex(nom_fin, waypoints);
+		int index_debut = findRouteIndex(nom_debut);
+		int index_fin = findRouteIndex(nom_fin);
 		route.push_back(Route(index_debut,index_fin,distance));
 	}
 };
