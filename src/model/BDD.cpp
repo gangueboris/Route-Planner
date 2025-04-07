@@ -101,8 +101,8 @@ void BDD::readRouteFromDb(std::vector<Route> & route, std::vector<Waypoint> &way
 		std:: string nom_debut = res->getString("nom_debut");
 		std:: string nom_fin = res->getString("nom_fin");
 		int distance = res->getInt("distance");
-		int index_debut = findRouteIndex(nom_debut);
-		int index_fin = findRouteIndex(nom_fin);
+		int index_debut = findRouteIndex(nom_debut,waypoints);
+		int index_fin = findRouteIndex(nom_fin, waypoints);
 		route.push_back(Route(index_debut,index_fin,distance));
 	}
 };
