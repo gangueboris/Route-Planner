@@ -28,7 +28,7 @@
 
 class Graph {
    public:
-      Graph(std::vector<Waypoint> waypoints_init, double precision_init = 70) : waypoints{waypoints_init}, precision{precision_init}{
+      Graph(std::vector<Waypoint> waypoints_init, double precision_init = 50) : waypoints{waypoints_init}, precision{precision_init}{
          createAdjacencyList();
       }
       ~Graph(){}

@@ -98,7 +98,7 @@ void BDD::readRouteFromDb(std::vector<Route> & route, std::vector<Waypoint> &way
 		int index_fin = findRouteIndex(nom_fin);
 		route.push_back(Route(index_debut,index_fin,distance));
 	}
-};
+}
 
 
 int BDD::findRouteIndex(std::string nom, std::vector<Waypoint> &waypoints){

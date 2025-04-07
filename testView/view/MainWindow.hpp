@@ -19,6 +19,7 @@
 #include <QStatusBar>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QMessageBox>
 
 class MainWindow: public QMainWindow {
     Q_OBJECT
@@ -31,10 +32,13 @@ class MainWindow: public QMainWindow {
 
     public slots:
         void geoCoordsSlot(QPointF p);
+        void slotCompute();
+    
 
     private:
-        QLabel* startTown;
-        QLabel* destTown;
+        QLineEdit* startLineEdit;
+        QLineEdit* arrivalLineEdit;
+        QPushButton* compute;
         QLabel* distance;
         QLabel* precision;
         QWidget* mainWidget;

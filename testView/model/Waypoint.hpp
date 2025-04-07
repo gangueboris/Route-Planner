@@ -9,9 +9,7 @@
 class  Waypoint{
     public:
        // Constructor
-       Waypoint(std::string nom="", float lon=0.0, float lat=0.0) : nom(nom), lon(lon), lat(lat) {}
-       
-       Waypoint(){}
+       Waypoint(std::string nom="", float lon=0.0, float lat=0.0) : nom(nom), lon(lon), lat(lat) {} 
        
        // Destructor
        ~Waypoint(){}

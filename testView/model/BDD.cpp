@@ -9,7 +9,6 @@ BDD::BDD (std::string host, std::string nomBDD, std::string login, std::string p
 		con->setSchema(nomBDD);
 		setlocale(LC_ALL,"C");
 
-
 		std::vector<Point> points;
 		Contour contour(points);
 		std::vector<Waypoint> waypoints;
@@ -19,13 +18,9 @@ BDD::BDD (std::string host, std::string nomBDD, std::string login, std::string p
 		readContourFromDb(contour);
 		readWaypointsFromDb(waypoints);
 		readVilleFromDb(villes);
-
+		readRouteFromDb(routes, waypoints);
 
 		this->carte = Carte(contour,routes,villes,waypoints);
-	
-
-		//readRouteFromDb(routes);
-
 }
 
 BDD::~BDD(){
@@ -58,13 +53,13 @@ void BDD::readWaypointsFromDb(std::vector<Waypoint> & waypoint){
 
 	while(res->next()){ 
 		std::string nom = res->getString("nom");
-		int lat = res->getInt("lat");
-		int lon = res->getInt("lon");
-		waypoint.push_back(Waypoint(nom,lat,lon));
+		float lat = res->getDouble("lat");
+		float lon = res->getDouble("lon");
+		waypoint.push_back(Waypoint(nom,lon,lat));
 	}
 }
 
-void BDD::readVilleFromDb(std::vector<Ville>& ville){
+void BDD::readVilleFromDb(std::vector<Ville>& ville) {
 	sql::Statement *stmt = con->createStatement();
 	sql::ResultSet *res = stmt->executeQuery("SELECT nom, code_postal, nb_habitants, site FROM ville");
 
@@ -73,18 +68,24 @@ void BDD::readVilleFromDb(std::vector<Ville>& ville){
 		std::string code_postal = res->getString("code_postal");
 		int nb_habitants = res->getInt("nb_habitants");
 		std:: string site = res->getString("site");
-
-		/*
-		   - SELECT lon, lat FROM waypoint WHERE nom = nom_ville;
+        
+		// Get lon and lat from db
+		sql::PreparedStatement* pstmt = con->prepareStatement("SELECT lat, lon FROM waypoint WHERE nom = ?");
+		pstmt->setString(1, nom_ville); // Bind the nom_ville value to the placeholder
+		sql::ResultSet* res2 = pstmt->executeQuery();
 		
-		   - ville.push_back(Ville(nom, code_postal, nb_habitants, site, lon, lat)); // New ville initialisation
-		*/
-
-		ville.push_back(Ville(nom_ville, code_postal, nb_habitants, site));
+		float lon, lat;
+		if (res2->next()) { 
+			lat = res2->getDouble("lat");
+			lon = res2->getDouble("lon");
+		} else {
+			std::cout << "No results found.\n";
+		}
+		ville.push_back(Ville(nom_ville, code_postal, nb_habitants, site, lon, lat)); // New ville initialisation
 	}
 }
 
-/*void BDD::readRouteFromDb(std::vector<Route> & route){
+void BDD::readRouteFromDb(std::vector<Route>& route, std::vector<Waypoint>& waypoints){
 	
 	sql::Statement *stmt = con->createStatement();
 	sql::ResultSet *res = stmt->executeQuery("SELECT nom_debut, nom_fin, distance FROM route");
@@ -94,10 +95,23 @@ void BDD::readVilleFromDb(std::vector<Ville>& ville){
 		std:: string num_debut = res->getString("nom_debut");
 		std:: string nom_fin = res->getString("nom_fin");
 		int distance = res->getInt("distance");
-		route.push_back(Route(num_debut,nom_fin,distance));
+		
+		int i_debut = this->findWaypointIndex(num_debut, waypoints);
+		int i_fin = this->findWaypointIndex(nom_fin, waypoints);
+        
+		route.push_back(Route(i_debut, i_fin, distance));
 	}
-}*/
+}
 
 
+
+int BDD::findWaypointIndex(const std::string& wp_name, std::vector<Waypoint>& waypoints) {
+    for (int i = 0; i < static_cast<int>(waypoints.size()); ++i) {
+        if (waypoints[i].getNom() ==  wp_name) {
+            return i;
+        }
+    }
+    return -1; // Not found
+}
 
 

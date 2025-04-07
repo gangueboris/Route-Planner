@@ -9,7 +9,7 @@
 #include <cppconn/driver.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
-
+#include <cppconn/prepared_statement.h>
 #include "Carte.hpp"
 
 class BDD {
@@ -20,7 +20,8 @@ class BDD {
 
 		/*Member Function*/
 		void readContourFromDb(Contour &Contour);
-		//void readRouteFromDb(std::vector<Route> & route);
+		void readRouteFromDb(std::vector<Route> & route, std::vector<Waypoint>& waypoints);
+		int findWaypointIndex(const std::string& wp_name, std::vector<Waypoint>& waypoints);
 		void readVilleFromDb(std::vector<Ville> & ville);
 		void readWaypointsFromDb(std::vector<Waypoint>& waypoint);
 		Carte getCarte(){return carte;}

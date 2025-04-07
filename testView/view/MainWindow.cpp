@@ -26,6 +26,7 @@ MainWindow::MainWindow(Carte& carte) : carte(carte) {
 	
 	connect(this->mainView, &MainView::coord_viewport, this->miniView, &MiniView::trace_viewport);
 	connect(this->mainView, &MainView::position, this, &MainWindow::geoCoordsSlot);
+	connect(this->compute, &QPushButton::clicked, this, &MainWindow::slotCompute);
 }
 
 
@@ -40,12 +41,12 @@ QGroupBox* MainWindow::createGroupBoxInfos() {
 	QLabel* arrivalLabel = new QLabel("Arrival City");
     QLabel* distanceLabel = new QLabel("Distance: " + QString::fromStdString(std::to_string(this->sceneCarte->getDistance())) + " km");
 
-    QLineEdit* startLineEdit = new QLineEdit;
-    startLineEdit->setPlaceholderText("Departure...");
-    QLineEdit* arrivalLineEdit = new QLineEdit;
-    arrivalLineEdit->setPlaceholderText("Arrival...");
+    this->startLineEdit = new QLineEdit;
+    this->startLineEdit->setPlaceholderText("Departure...");
+    this->arrivalLineEdit = new QLineEdit;
+    this->arrivalLineEdit->setPlaceholderText("Arrival...");
      
-	QPushButton* compute = new QPushButton("Go");
+	this->compute = new QPushButton("Go");
 	this->miniView = new MiniView(this->sceneCarte, this);
     
 
@@ -97,5 +98,29 @@ void MainWindow::geoCoordsSlot(QPointF p) {
 
 	QString msg = "Stage coordinates: ("+ QString::fromStdString(latStr) + ", " + QString::fromStdString(lonStr) + ")";
 	this->statusBar->showMessage(msg);
+}
 
+void MainWindow::slotCompute() {
+   /*
+      1. Get input value from lineEdit
+	  2. Validate the inputs: if not valide display critical
+	  3. if valide emit signal with these values
+   */
+
+   // Get input values
+   QString wp_start = this->startLineEdit->text();
+   QString wp_end = this->arrivalLineEdit->text();
+
+   QString error_message = "";
+   // Validation
+   if(wp_start.isEmpty()) {
+     error_message = "The starting field is empty !";
+   } else if(wp_end.isEmpty()) {
+	 error_message = "The destination field is empty !";
+   } else {
+	   this->sceneCarte->computeAndDrawShortestPath(wp_start.toStdString(), wp_end.toStdString());
+	  return;
+   }
+
+   QMessageBox::critical(nullptr,"ERROR", error_message);   
 }

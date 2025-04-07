@@ -41,10 +41,16 @@ void Graph::createAdjacencyList() {
     double maxDistance = this->precision;
 
     for (int i = 0; i < (int)waypoints.size(); ++i) {
+        //std::cout << waypoints[i].getNom() << '\n'; 
         for (int j = i + 1; j < (int)waypoints.size(); ++j) {
             // Compute the distance between two waypoint in km
             double dist = calculateDistance(waypoints[i], waypoints[j]);
+
             if (dist <= maxDistance) {
+                if(waypoints[i].getNom() == "Brest") {
+                    std::cout << waypoints[j].getNom() + ": "<< dist << "\n";
+                }
+
                 // Add bidirectional edges for an undirected graph
                 adjacencyList[waypoints[i].getNom()].push_back({waypoints[j].getNom(), dist});
                 adjacencyList[waypoints[j].getNom()].push_back({waypoints[i].getNom(), dist});
@@ -185,3 +191,4 @@ void Graph::adjacencyListToEdgeListFile(const std::unordered_map<std::string, st
     // Print a confirmation message indicating the edge list has been written
     std::cout << "Edge list written to " << filename << std::endl;
 }
+

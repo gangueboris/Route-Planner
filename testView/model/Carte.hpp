@@ -24,7 +24,8 @@ class Carte {
        //float getEchelleLong() const {}
 
        std::vector<Waypoint> getWaypoints() const {return this->waypoints;}
-
+       
+       std::vector<Ville> getVilles() const {return this->villes;}
        std::vector<Route> getRoutes() const {return this->routes;}
 
        std::vector<std::string> getNomsVilles() const {         // A city's name is in a waypoint.

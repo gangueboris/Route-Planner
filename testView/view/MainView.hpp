@@ -25,8 +25,8 @@ class MainView : public QGraphicsView {
 		// Gestionnaires d'évènements
 
 		// Fit de la vue sur les limites de la scène
-		void resizeEvent (QResizeEvent * ) override {
-			if ( this->transform().m11() == 1 ) {
+		void resizeEvent (QResizeEvent*) override {
+			if (this->transform().m11() == 1) {
 				this->fitInView(sceneRect(), Qt::KeepAspectRatio);
 			}
 		}

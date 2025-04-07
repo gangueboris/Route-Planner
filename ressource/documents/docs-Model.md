@@ -6,10 +6,17 @@ espectations. Then based on your understanding, design a step-by-step path I sho
 - Create the MVC of Graph, SceneCarte (Done)
 - Create the project's roadMap. (Done)
 - Implement the Graph's class (Done)
-- Implement 
-- Find issues in the shortestPath algorithm
-- Add comment to Graph class and to its methods
+- Find issues in the shortestPath algorithm (Done)
+- Add comment to Graph class and to its methods (Done)
+- Find solution to display distance
+- Find solution to update the shortest path drawing at each go.
+- Find solution for why shortest path does take in account waypoint which are not ville.
 
+- Ressoudre bugs drawShortestPath()
+- Recupérer le main
+- 
+
+- 
 1. Create the relationship between waypoints based on the shortest distance between two.
 `
 waypointList = []

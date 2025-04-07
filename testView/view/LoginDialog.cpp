@@ -53,12 +53,6 @@ void LoginDialog::getResult(string& host, string& database, string& username, st
 /*============================== Slots ==============================*/
 /*========== Slot Login ==========*/
 void LoginDialog::slotLogin() {
-    /*
-     - Get the Dialog LineEdit
-     - Make some verification (not empty)
-     - Set them to inputs parameters
-    */
-    
     // Get LoginDialog QLineEdits user inputs
     QString host = this->hostLineEdit->text();
     QString database = this->databaseLineEdit->text();
