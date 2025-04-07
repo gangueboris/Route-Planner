@@ -7,6 +7,16 @@
 #include <iostream>
 #include <sstream>
 
+/**
+ * @class Ville derived class of waypoint
+ * @brief Contains a collection of ville 
+ * 
+ * This class has display methods and getter
+ * 
+ * @author Gaspard Vieujean
+ * @date April 2, 2025
+ */
+
 class Ville : public Waypoint {
     public:
        // Constructor

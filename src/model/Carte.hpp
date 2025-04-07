@@ -10,6 +10,18 @@
 #include "Contour.hpp"
 #include "Ville.hpp"
 
+/**
+ * @class Carte
+ * @brief Contains the contour, waypoints, ville and waypoints from the DB
+ * 
+ * This class allows to get the informations needed from the DB
+ * But also allows to add wawpoints and ville
+ * 
+ * 
+ * @author Boris Gangue 
+ * @date March 31, 2025
+ */
+
 class Carte {
     public:
        // Constructor

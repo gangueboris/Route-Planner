@@ -5,6 +5,17 @@
 #include <string>
 #include <sstream>
 
+/**
+ * @class Route
+ * @brief Contains a collection of routes
+ * 
+ * This class contains getters to acces the informations
+ * And also display methods
+ * 
+ * @author Gaspard Vieujean
+ * @date March 31, 2025
+ */
+
 class Route {
     public:
        // Constructor

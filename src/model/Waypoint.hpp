@@ -6,6 +6,17 @@
 #include <iomanip>
 #include <sstream>
 
+/**
+ * @class Waypoint mother class of Ville
+ * @brief Contains a collection of Waypoints
+ * 
+ * This class allows to get informations threw getters and also set them threw setter
+ * It contains display method and a method to know if a waypoint is a Ville
+ * 
+ * @author Boris Gangue 
+ * @date March 30, 2025
+ */
+
 class  Waypoint{
     public:
        // Constructor
