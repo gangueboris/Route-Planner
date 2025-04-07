@@ -19,12 +19,16 @@ BDD::BDD (std::string host, std::string nomBDD, std::string login, std::string p
 		readContourFromDb(contour);
 		readWaypointsFromDb(waypoints);
 		readVilleFromDb(villes);
+		readRouteFromDb(routes,waypoints);
+		for(auto &elem : routes){
+			std::cout << elem.getInfos() << std::endl;
+		}
 
 
 		this->carte = Carte(contour,routes,villes,waypoints);
 	
 
-		//readRouteFromDb(routes);
+
 
 }
 
@@ -80,20 +84,33 @@ void BDD::readVilleFromDb(std::vector<Ville> & ville){
 	}
 };
 
-/*void BDD::readRouteFromDb(std::vector<Route> & route){
+void BDD::readRouteFromDb(std::vector<Route> & route, std::vector<Waypoint> &waypoints){
 	
 	sql::Statement *stmt = con->createStatement();
 	sql::ResultSet *res = stmt->executeQuery("SELECT nom_debut, nom_fin, distance FROM route");
 	
 
 	while(res->next()){ 
-		std:: string num_debut = res->getString("nom_debut");
+		std:: string nom_debut = res->getString("nom_debut");
 		std:: string nom_fin = res->getString("nom_fin");
 		int distance = res->getInt("distance");
-		route.push_back(Route(num_debut,nom_fin,distance));
+		int index_debut = findRouteIndex(nom_debut);
+		int index_fin = findRouteIndex(nom_fin);
+		route.push_back(Route(index_debut,index_fin,distance));
 	}
-};*/
+};
 
+
+int BDD::findRouteIndex(std::string nom, std::vector<Waypoint> &waypoints){
+	int index = -1;
+	for (int i = 0;i<static_cast<int> (waypoints.size());i++){
+		if(waypoints[i].getNom() == nom){
+			index = i;
+			break;
+		}
+	}
+	return index;
+}
 
 
 
