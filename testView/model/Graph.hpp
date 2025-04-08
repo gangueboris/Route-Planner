@@ -28,7 +28,7 @@
 
 class Graph {
    public:
-      Graph(std::vector<Waypoint> waypoints_init, double precision_init = 70) : waypoints{waypoints_init}, precision{precision_init}{
+      Graph(std::vector<Waypoint> waypoints_init, double precision_init = 92) : waypoints{waypoints_init}, precision{precision_init}{
          createAdjacencyList();
       }
       Graph(){}
@@ -41,6 +41,7 @@ class Graph {
       void setPrecision(double new_precision) {precision = new_precision;}
       void adjacencyListToEdgeListFile(const std::unordered_map<std::string, std::vector<std::pair<std::string, double>>>& adjacencyList, const std::string& filename);
       std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> getAdjacencyList() {return this->adjacencyList;}
+      int findWaypointIndex(const Waypoint& wp);
       
    private:
       std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> adjacencyList;
@@ -49,7 +50,7 @@ class Graph {
       
       void createAdjacencyList();
       double calculateDistance(const Waypoint& wp1, const Waypoint& wp2);
-      int findWaypointIndex(const Waypoint& wp);
+     
 };
 
 #endif

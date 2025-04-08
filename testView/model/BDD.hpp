@@ -20,8 +20,8 @@ class BDD {
 
 		/*Member Function*/
 		void readContourFromDb(Contour &Contour);
-		void readRouteFromDb(std::vector<Route> & route, std::vector<Waypoint>& waypoints);
-		int findWaypointIndex(const std::string& wp_name, std::vector<Waypoint>& waypoints);
+		void readRouteFromDb(std::vector<Route> & route, std::vector<Waypoint> &waypoints);
+		int findRouteIndex(std::string nom, std::vector<Waypoint> &waypoints);
 		void readVilleFromDb(std::vector<Ville> & ville);
 		void readWaypointsFromDb(std::vector<Waypoint>& waypoint);
 		Carte getCarte(){return carte;}

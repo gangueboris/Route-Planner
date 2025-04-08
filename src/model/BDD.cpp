@@ -30,22 +30,13 @@ BDD::BDD (std::string host, std::string nomBDD, std::string login, std::string p
 		readWaypointsFromDb(waypoints);
 		readVilleFromDb(villes);
 		readRouteFromDb(routes,waypoints);
-		for(auto &elem : routes){
-			std::cout << elem.getInfos() << std::endl;
-		}
-
 
 		this->carte = Carte(contour,routes,villes,waypoints);
-	
-
-
-
 }
 
 /**
  * @brief Destructor of the class BDD
  */
-
 BDD::~BDD(){
 	std::cout << "Fermeture connection\n";
 	delete con;
@@ -57,7 +48,6 @@ BDD::~BDD(){
  * @param contour contour that has a vector<Point>
  * @return void
  */
-
 void BDD::readContourFromDb(Contour &contour){
 	
 	std::vector<Point> points;
@@ -82,7 +72,6 @@ void BDD::readContourFromDb(Contour &contour){
  * @param waypoint vector of Waypoint
  * @return void
  */
-
 void BDD::readWaypointsFromDb(std::vector<Waypoint> & waypoint){
 	
 	sql::Statement *stmt = con->createStatement();
@@ -95,7 +84,7 @@ void BDD::readWaypointsFromDb(std::vector<Waypoint> & waypoint){
 		int lon = res->getInt("lon");
 		waypoint.push_back(Waypoint(nom,lat,lon));
 	}
-};
+}
 
 /**
  * @brief Get the villes from the DB containing all the informations about it
@@ -103,7 +92,6 @@ void BDD::readWaypointsFromDb(std::vector<Waypoint> & waypoint){
  * @param ville vector of ville
  * @return void
  */
-
 void BDD::readVilleFromDb(std::vector<Ville> & ville){
 	
 	sql::Statement *stmt = con->createStatement();
@@ -116,7 +104,7 @@ void BDD::readVilleFromDb(std::vector<Ville> & ville){
 		std:: string site = res->getString("site");
 		ville.push_back(Ville(nom,code_postal,site,nb_habitants));
 	}
-};
+}
 
 /**
  * @brief Get all the routes from the DB
@@ -128,7 +116,6 @@ void BDD::readVilleFromDb(std::vector<Ville> & ville){
  * Basically we implement the 2 param because the informations in the DB is not what we need in the project
  * 
  */
-
 void BDD::readRouteFromDb(std::vector<Route> & route, std::vector<Waypoint> &waypoints){
 	
 	sql::Statement *stmt = con->createStatement();
@@ -155,10 +142,9 @@ void BDD::readRouteFromDb(std::vector<Route> & route, std::vector<Waypoint> &way
  * 
  * This function is there to get the index of a route by comparing the name and the waypoint with the same name
  */
-
 int BDD::findRouteIndex(std::string nom, std::vector<Waypoint> &waypoints){
 	int index = -1;
-	for (int i = 0;i<static_cast<int> (waypoints.size());i++){
+	for (int i = 0;i<static_cast<int> (waypoints.size());i++) {
 		if(waypoints[i].getNom() == nom){
 			index = i;
 			break;
@@ -166,6 +152,3 @@ int BDD::findRouteIndex(std::string nom, std::vector<Waypoint> &waypoints){
 	}
 	return index;
 }
-
-
-

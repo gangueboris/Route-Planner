@@ -96,8 +96,8 @@ void BDD::readRouteFromDb(std::vector<Route>& route, std::vector<Waypoint>& wayp
 		std:: string nom_fin = res->getString("nom_fin");
 		int distance = res->getInt("distance");
 		
-		int i_debut = this->findWaypointIndex(num_debut, waypoints);
-		int i_fin = this->findWaypointIndex(nom_fin, waypoints);
+		int i_debut = this->findRouteIndex(num_debut, waypoints);
+		int i_fin = this->findRouteIndex(nom_fin, waypoints);
         
 		route.push_back(Route(i_debut, i_fin, distance));
 	}
@@ -105,13 +105,14 @@ void BDD::readRouteFromDb(std::vector<Route>& route, std::vector<Waypoint>& wayp
 
 
 
-int BDD::findWaypointIndex(const std::string& wp_name, std::vector<Waypoint>& waypoints) {
-    for (int i = 0; i < static_cast<int>(waypoints.size()); ++i) {
-        if (waypoints[i].getNom() ==  wp_name) {
-            return i;
-        }
-    }
-    return -1; // Not found
+int BDD::findRouteIndex(std::string nom, std::vector<Waypoint> &waypoints) {
+	int index = -1;
+	for (int i = 0;i<static_cast<int> (waypoints.size());i++) {
+		if(waypoints[i].getNom() == nom){
+			index = i;
+			break;
+		}
+	}
+	return index;
 }
-
 

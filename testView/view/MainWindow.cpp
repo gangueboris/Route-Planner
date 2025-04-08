@@ -31,7 +31,7 @@ MainWindow::MainWindow(Carte& carte) : carte(carte) {
 
 
 QGroupBox* MainWindow::createGroupBoxInfos() {
-	QGroupBox * gb = new QGroupBox;
+	QGroupBox* gb = new QGroupBox;
 	gb->setMaximumWidth(this->width/3);
 
 	QVBoxLayout *vbox = new QVBoxLayout;
@@ -39,7 +39,7 @@ QGroupBox* MainWindow::createGroupBoxInfos() {
     
     QLabel* startLabel = new QLabel("Departure City");
 	QLabel* arrivalLabel = new QLabel("Arrival City");
-    QLabel* distanceLabel = new QLabel("Distance: " + QString::fromStdString(std::to_string(this->sceneCarte->getDistance())) + " km");
+    this->distanceLabel = new QLabel("Distance: 0 km");
 
     this->startLineEdit = new QLineEdit;
     this->startLineEdit->setPlaceholderText("Departure...");
@@ -118,7 +118,12 @@ void MainWindow::slotCompute() {
    } else if(wp_end.isEmpty()) {
 	 error_message = "The destination field is empty !";
    } else {
+       // Draw Shortest path
 	   this->sceneCarte->computeAndDrawShortestPath(wp_start.toStdString(), wp_end.toStdString());
+
+       // Compute and update distance between src and dest
+       this->distanceLabel->setText("Distance: " + QString::fromStdString(std::to_string(this->sceneCarte->getDistance())) + " Km");
+
 	  return;
    }
 

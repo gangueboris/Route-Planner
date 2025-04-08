@@ -43,6 +43,7 @@ class MainWindow: public QMainWindow {
         QLabel* precision;
         QWidget* mainWidget;
         QStatusBar* statusBar;
+        QLabel* distanceLabel;
 
         // Dimensions
         int width;

@@ -6,8 +6,8 @@ SceneCarte::SceneCarte(Carte& carte) {
     // Init carte and mainWindow
     this->carte = carte;
     
-    this->graph = Graph(this->carte.getWaypoints(), 50);
-
+    this->graph = Graph(this->carte.getWaypoints());
+                                                                                                                                            
    // Draw contour
    this->drawContour(carte.getContour());
 
@@ -169,7 +169,11 @@ bool SceneCarte::isVille(std::string wp_name) {
 
 
 int SceneCarte::getDistance() {
-    return 0;
+    std::vector<Waypoint> waypoints = this->carte.getWaypoints();
+    int index1 = this->graph.findWaypointIndex(Waypoint(this->start));
+    int index2 =  this->graph.findWaypointIndex(Waypoint(this->dest));
+
+    return this->graph.getDistance(waypoints[index1], waypoints[index2]);
 }
 
 void SceneCarte::computeAndDrawShortestPath(const std::string& start, const std::string& dest) {
@@ -178,23 +182,41 @@ void SceneCarte::computeAndDrawShortestPath(const std::string& start, const std:
      2. call the shortest path
      3. Implement the drawShortestPath and call it
     */
-
+   
     // Validate if start and dest are villes before...
     if(isVille(start) && isVille(dest)) {
+        // Init start and dest
+        this->start = start;
+        this->dest = dest;
+    
         // Get Waypoints
         Waypoint wp_start(start);
         Waypoint wp_dest(dest);
         
         // Compute the shortest path
         std::vector<int> path = this->graph.getShortestPath(wp_start, wp_dest);
+        this->graph.visualizePath(path);
+
+        // Clear the previous drawing and draw the new line
+        this->clear(); 
+
+        // Draw contour
+        this->drawContour(carte.getContour());
+
+        // Draw Waypoints  Must be called first before ville
+        this->drawWaypoint(carte.getWaypoints());
+
+        // Draw ville 
+        this->drawVille(carte.getVilles());
+
+        // Draw Routes
+        this->drawRoute(carte.getRoutes());
         
         // Draw ShortestPath
         this->drawShortestPath(path);
-        this->graph.visualizePath(path);
-
+        
     } else {
         std::cout << "City not valid !! \n";
     }
-
 }
 
