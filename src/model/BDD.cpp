@@ -102,7 +102,21 @@ void BDD::readVilleFromDb(std::vector<Ville> & ville){
 		std::string code_postal = res->getString("code_postal");
 		int nb_habitants = res->getInt("nb_habitants");
 		std:: string site = res->getString("site");
-		ville.push_back(Ville(nom,code_postal,site,nb_habitants));
+
+		// Get lon and lat from db
+		sql::PreparedStatement* pstmt = con->prepareStatement("SELECT lat, lon FROM waypoint WHERE nom = ?");
+		pstmt->setString(1, nom_ville); // Bind the nom_ville value to the placeholder
+		sql::ResultSet* res2 = pstmt->executeQuery();
+		
+		float lon, lat;
+		if (res2->next()) { 
+			lat = res2->getDouble("lat");
+			lon = res2->getDouble("lon");
+		} else {
+			std::cout << "No results found.\n";
+		}
+		ville.push_back(Ville(nom_ville, code_postal, nb_habitants, site, lon, lat)); // New ville initialisation		
+		
 	}
 }
 

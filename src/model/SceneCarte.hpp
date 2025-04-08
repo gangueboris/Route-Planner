@@ -13,6 +13,15 @@
 #include "Graph.hpp"
 #include "Carte.hpp" 
 
+/**
+ * @class SceneCarte
+ * @brief Draw the information on a scene
+ *
+ * This class basically draws on a scene with all informations from the DB
+ *
+ * @author Boris Gangue
+ * @date April 2, 2025
+ */
 
 class SceneCarte : public QGraphicsScene {
 Q_OBJECT

@@ -21,6 +21,16 @@
 #include <QPushButton>
 #include <QMessageBox>
 
+/**
+ * @class MainWindow, derived clas of QMainWindow
+ * @brief Contains the groupBox, big and small vue
+ *
+ * This class shows a big interface with all the views 
+ *
+ * @author Boris Gangue
+ * @date April 3, 2025
+ */
+
 class MainWindow: public QMainWindow {
     Q_OBJECT
     public:

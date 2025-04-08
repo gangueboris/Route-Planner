@@ -2,6 +2,14 @@
 
 //std::map<std::string, QColor> SceneCarte::tabColors = {{"black", Qt::black}, {"green", Qt::green}};
 
+/**
+ * @brief Draw the waypoints, contour, ville and routes from a Carte
+ * 
+ * @param carte The map that contains all informations.
+ * 
+ * Constructor of the class
+ */
+
 SceneCarte::SceneCarte(Carte& carte) {
     // Init carte and mainWindow
     this->carte = carte;
@@ -25,6 +33,13 @@ SceneCarte::SceneCarte(Carte& carte) {
    
 }
       
+/**
+ * @brief Draw the lines in Qt of a contour
+ * 
+ * @param Contour The outline that contains all the points.
+ * @return void
+ */
+
 void SceneCarte::drawContour(Contour contour) {
     QPolygonF polygon;
 
@@ -43,6 +58,13 @@ void SceneCarte::drawContour(Contour contour) {
     // Add contour to the scene
     this->addItem(contourItem); 
 }
+
+/**
+ * @brief Draw roads in Qt from a vector of Road
+ * 
+ * @param route vector of roads
+ * @return void
+ */
 
 void SceneCarte::drawRoute(std::vector<Route> routes) {
     std::vector<Waypoint> waypoints = this->carte.getWaypoints();
@@ -65,6 +87,12 @@ void SceneCarte::drawRoute(std::vector<Route> routes) {
     }
 }
 
+/**
+ * @brief Draw cities in Qt from a vector of city
+ * 
+ * @param villes Vector of roads
+ * @return void
+ */
 
 void SceneCarte::drawVille(std::vector<Ville> villes) {
     for (auto& ville : villes) {
@@ -87,6 +115,13 @@ void SceneCarte::drawVille(std::vector<Ville> villes) {
         this->addItem(villeItem);
     }
 }
+
+/**
+ * @brief Draw waypoints in Qt from a vector of Waypoint
+ * 
+ * @param waypoints vector of waypoints
+ * @return void
+ */
 
 void SceneCarte::drawWaypoint(std::vector<Waypoint> waypoints) {
     for(auto& waypoint : waypoints) {
@@ -111,7 +146,12 @@ void SceneCarte::drawWaypoint(std::vector<Waypoint> waypoints) {
     }
 }
 
-
+/**
+ * @brief Draw the shortest path from a city to another
+ * 
+ * @param path vector of int of a path
+ * @return void
+ */
 
 void SceneCarte::drawShortestPath(std::vector<int> path) {
     std::vector<Waypoint> waypoints = this->carte.getWaypoints();
@@ -158,6 +198,13 @@ void SceneCarte::latLonToXY(float lon, float lat, double &x, double &y) {
     y /= 1000;
 }
 
+/**
+ * @brief indicates from a name if the waypoint is a city
+ * 
+ * @param wp_name name of a waypoint
+ * @return FALSE
+ */
+
 bool SceneCarte::isVille(std::string wp_name) {
     for (const auto& ville : this->carte.getVilles()) {
         if (ville.getNom() == wp_name) {
@@ -171,6 +218,14 @@ bool SceneCarte::isVille(std::string wp_name) {
 int SceneCarte::getDistance() {
     return 0;
 }
+
+/**
+ * @brief Allows to compute and draw in Qt the sortest path
+ * 
+ * @param start name of the waypoint we are starting from
+ * @param dest name of the waypoint we are going to
+ * @return void
+ */
 
 void SceneCarte::computeAndDrawShortestPath(const std::string& start, const std::string& dest) {
     /*

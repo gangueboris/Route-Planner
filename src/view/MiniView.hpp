@@ -4,6 +4,16 @@
 
 #include "model/SceneCarte.hpp"
 
+/**
+ * @class MiniView, derived class of QGraphicsView
+ * @brief Manages a collection of contacts.
+ *
+ * This class draws a small view on bottom of the QGroupBox
+ *
+ * @author Boris Gangue
+ * @date April 3, 2025
+ */
+
 class MiniView : public QGraphicsView {
 	Q_OBJECT
 	public :

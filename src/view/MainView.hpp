@@ -7,6 +7,16 @@
 
 #include "model/SceneCarte.hpp"
 
+/**
+ * @class MainView
+ * @brief Shows the big scene in Qt
+ *
+ * This class allows to draw the informations in the Big scene
+ *
+ * @author Boris Gangue
+ * @date April 2, 2025
+ */
+
 class MainView : public QGraphicsView {
 	Q_OBJECT
 	public :

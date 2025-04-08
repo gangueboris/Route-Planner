@@ -1,14 +1,3 @@
-/**
- * @class Graph
- * @brief Represents a graph of waypoints and provides pathfinding functionality.
- *
- * This class manages a set of waypoints, constructs an adjacency list,
- * and implements Dijkstra's algorithm to find the shortest path between waypoints.
- * It also includes a visualization method to display the computed paths.
- *
- * @author Boris Gangue
- * @date March 30, 2025
- */
 #ifndef GRAPH_H
 #define GRAPH_H
 
@@ -25,6 +14,18 @@
 
 #include "Route.hpp"
 #include "Waypoint.hpp"
+
+/**
+ * @class Graph
+ * @brief Represents a graph of waypoints and provides pathfinding functionality.
+ *
+ * This class manages a set of waypoints, constructs an adjacency list,
+ * and implements Dijkstra's algorithm to find the shortest path between waypoints.
+ * It also includes a visualization method to display the computed paths.
+ *
+ * @author Boris Gangue
+ * @date March 30, 2025
+ */
 
 class Graph {
    public:

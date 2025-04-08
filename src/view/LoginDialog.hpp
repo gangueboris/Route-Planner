@@ -10,7 +10,16 @@
 #include <QMessageBox>
 using namespace std;
 
-// Login Dialog Class definition
+/**
+ * @class LoginDialog, derived class from QDialog
+ * @brief Shows an interface for the connexion of the DB
+ *
+ * This class get the variable for the connexion and also checked if their are right to allow or not the connexion
+ *
+ * @author Boris Gangue
+ * @date March 31, 2025
+ */
+
 class LoginDialog : public QDialog {
     Q_OBJECT
     public:

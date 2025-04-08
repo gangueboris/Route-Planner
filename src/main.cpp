@@ -37,7 +37,7 @@ int main (int argc, char **argv){
     try {
         BDD BDD("tcp://"+host+":3306",base,user,pwd);
         carte = BDD.getCarte();
-       return 1;
+        return 1;
     }
     catch (sql::SQLException &e){
         std::cout << "Erreur MYSQL, sortie du programme\n";

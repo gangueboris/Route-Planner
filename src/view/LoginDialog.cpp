@@ -1,5 +1,12 @@
 #include "LoginDialog.hpp"
 
+/**
+ * @brief Create a login dialog with the user to connect to the DB
+ * 
+ * @param parent Widget from the mother class
+ * Constructor of the LoginDialog Class
+ */
+
 LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent) {
     // Creation of buttons, labels and lineEdits
     this->hostLabel = new QLabel("Host");

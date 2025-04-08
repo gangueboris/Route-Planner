@@ -1,5 +1,12 @@
 #include "MainWindow.hpp"
 
+/**
+ * @brief Initialize the main window with its widgets
+ * 
+ * @param carte Carte that has all informations from the DB
+ * Constructor of the class MainWindow
+ */
+
 MainWindow::MainWindow(Carte& carte) : carte(carte) {
 
     // Init the general widget
@@ -29,6 +36,11 @@ MainWindow::MainWindow(Carte& carte) : carte(carte) {
 	connect(this->compute, &QPushButton::clicked, this, &MainWindow::slotCompute);
 }
 
+/**
+ * @brief Initialize the groupbox in top of the small scene
+ * 
+ * @return GroupBox
+ */
 
 QGroupBox* MainWindow::createGroupBoxInfos() {
 	QGroupBox * gb = new QGroupBox;
@@ -61,7 +73,16 @@ QGroupBox* MainWindow::createGroupBoxInfos() {
 	return gb;
 }
 
-// Function to convert decimal degrees to D°MM.M' format
+/**
+ * @brief Function to convert decimal degrees to D°MM.M' format
+ * 
+ * @param decimal decimal variable
+ * @param positive positive variable
+ * @param negative nagative variable
+ *
+ * @return void
+ */
+
 std::string MainWindow::decimalToDMS(double decimal, char positive, char negative) {
     char direction = (decimal >= 0) ? positive : negative;
     decimal = std::fabs(decimal);  // Work with absolute value
@@ -74,6 +95,17 @@ std::string MainWindow::decimalToDMS(double decimal, char positive, char negativ
     snprintf(buffer, sizeof(buffer), "%d°%.2f'%c", degrees, minutes, direction);
     return std::string(buffer);
 }
+
+/**
+ * @brief Function that convert the coordinates in degrees 
+ * 
+ * @param x coordinate x
+ * @param y coordinate y
+ * @param lon longitude variable
+ * @param lat latitude variable
+ *
+ * @return void
+ */
 
 void MainWindow::xyToLatLon(double x, double y, float &lon, float &lat) {
     const double EARTH_RADIUS = 6378137.0; // Earth's radius in meters
@@ -90,6 +122,14 @@ void MainWindow::xyToLatLon(double x, double y, float &lon, float &lat) {
 }
 
 /*============================= SLOTS ==============================*/
+
+/**
+ * @brief Slot for when a waypoint clicked it show the coordinates
+ * 
+ * @param p waypoint clicked
+ * @return void
+ */
+
 void MainWindow::geoCoordsSlot(QPointF p) {
 	float lat, lon;
 	this->xyToLatLon(p.x(), p.y(), lon, lat);
@@ -99,6 +139,12 @@ void MainWindow::geoCoordsSlot(QPointF p) {
 	QString msg = "Stage coordinates: ("+ QString::fromStdString(latStr) + ", " + QString::fromStdString(lonStr) + ")";
 	this->statusBar->showMessage(msg);
 }
+
+/**
+ * @brief Slot for the groupBox of the strating city and destination city
+ * 
+ * @return void
+ */
 
 void MainWindow::slotCompute() {
    /*
