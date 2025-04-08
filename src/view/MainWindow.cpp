@@ -42,8 +42,8 @@ MainWindow::MainWindow(Carte& carte) : carte(carte) {
  * @return GroupBox
  */
 
-QGroupBox* MainWindow::createGroupBoxInfos() {
-	QGroupBox * gb = new QGroupBox;
+ QGroupBox* MainWindow::createGroupBoxInfos() {
+	QGroupBox* gb = new QGroupBox;
 	gb->setMaximumWidth(this->width/3);
 
 	QVBoxLayout *vbox = new QVBoxLayout;
@@ -51,7 +51,7 @@ QGroupBox* MainWindow::createGroupBoxInfos() {
     
     QLabel* startLabel = new QLabel("Departure City");
 	QLabel* arrivalLabel = new QLabel("Arrival City");
-    QLabel* distanceLabel = new QLabel("Distance: " + QString::fromStdString(std::to_string(this->sceneCarte->getDistance())) + " km");
+    this->distanceLabel = new QLabel("Distance: 0 km");
 
     this->startLineEdit = new QLineEdit;
     this->startLineEdit->setPlaceholderText("Departure...");
@@ -72,6 +72,7 @@ QGroupBox* MainWindow::createGroupBoxInfos() {
 
 	return gb;
 }
+
 
 /**
  * @brief Function to convert decimal degrees to D°MM.M' format
@@ -146,27 +147,32 @@ void MainWindow::geoCoordsSlot(QPointF p) {
  * @return void
  */
 
-void MainWindow::slotCompute() {
-   /*
-      1. Get input value from lineEdit
-	  2. Validate the inputs: if not valide display critical
-	  3. if valide emit signal with these values
-   */
-
-   // Get input values
-   QString wp_start = this->startLineEdit->text();
-   QString wp_end = this->arrivalLineEdit->text();
-
-   QString error_message = "";
-   // Validation
-   if(wp_start.isEmpty()) {
-     error_message = "The starting field is empty !";
-   } else if(wp_end.isEmpty()) {
-	 error_message = "The destination field is empty !";
-   } else {
-	   this->sceneCarte->computeAndDrawShortestPath(wp_start.toStdString(), wp_end.toStdString());
-	  return;
-   }
-
-   QMessageBox::critical(nullptr,"ERROR", error_message);   
-}
+ void MainWindow::slotCompute() {
+    /*
+       1. Get input value from lineEdit
+       2. Validate the inputs: if not valide display critical
+       3. if valide emit signal with these values
+    */
+ 
+    // Get input values
+    QString wp_start = this->startLineEdit->text();
+    QString wp_end = this->arrivalLineEdit->text();
+ 
+    QString error_message = "";
+    // Validation
+    if(wp_start.isEmpty()) {
+      error_message = "The starting field is empty !";
+    } else if(wp_end.isEmpty()) {
+      error_message = "The destination field is empty !";
+    } else {
+        // Draw Shortest path
+        this->sceneCarte->computeAndDrawShortestPath(wp_start.toStdString(), wp_end.toStdString());
+ 
+        // Compute and update distance between src and dest
+        this->distanceLabel->setText("Distance: " + QString::fromStdString(std::to_string(this->sceneCarte->getDistance())) + " Km");
+ 
+       return;
+    }
+ 
+    QMessageBox::critical(nullptr,"ERROR", error_message);   
+ }

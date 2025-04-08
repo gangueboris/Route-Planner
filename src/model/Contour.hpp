@@ -17,7 +17,7 @@
  #include <sstream>
  #include <vector>
  #include "Point.hpp"
- #include "BDD.hpp"
+ 
  
  class Contour {
     public :
@@ -35,25 +35,6 @@
 
      
  };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
  
  
  #endif

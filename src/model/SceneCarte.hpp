@@ -43,6 +43,8 @@ private:
        bool isVille(std::string wp_name);
        Graph graph;
        Carte carte;
+       std::string start;
+       std::string dest;
 };
 
 #endif

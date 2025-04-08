@@ -21,14 +21,13 @@
  * @author Boris Gangue 
  * @date March 31, 2025
  */
-
 class Carte {
     public:
        // Constructor
-       Carte(Contour contour_init,std::vector<Route> routes_init, std::vector<Ville> villes_init, std::vector<Waypoint> waypoints_init): contour(contour_init), routes(routes_init), villes(villes_init), waypoints(waypoints_init) {}
-       Carte(){}
+       Carte(Contour contour_init, std::vector<Route> routes_init, std::vector<Ville> villes_init, std::vector<Waypoint> waypoints_init): contour(contour_init), routes(routes_init), villes(villes_init), waypoints(waypoints_init) {}
+       Carte() {}
        // Destructor
-       ~Carte(){};
+       ~Carte(){}
        
        // Getters
        Contour getContour() const {return this->contour;}
@@ -36,7 +35,8 @@ class Carte {
        //float getEchelleLong() const {}
 
        std::vector<Waypoint> getWaypoints() const {return this->waypoints;}
-
+       
+       std::vector<Ville> getVilles() const {return this->villes;}
        std::vector<Route> getRoutes() const {return this->routes;}
 
        std::vector<std::string> getNomsVilles() const {         // A city's name is in a waypoint.

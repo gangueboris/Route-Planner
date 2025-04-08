@@ -6,7 +6,7 @@ SceneCarte::SceneCarte(Carte& carte) {
     // Init carte and mainWindow
     this->carte = carte;
     
-    this->graph = Graph(this->carte.getWaypoints());
+    this->graph = Graph(this->carte.getWaypoints(), 70);
                                                                                                                                             
    // Draw contour
    this->drawContour(carte.getContour());

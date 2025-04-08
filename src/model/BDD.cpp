@@ -19,7 +19,6 @@ BDD::BDD (std::string host, std::string nomBDD, std::string login, std::string p
 		con->setSchema(nomBDD);
 		setlocale(LC_ALL,"C");
 
-
 		std::vector<Point> points;
 		Contour contour(points);
 		std::vector<Waypoint> waypoints;
@@ -29,7 +28,7 @@ BDD::BDD (std::string host, std::string nomBDD, std::string login, std::string p
 		readContourFromDb(contour);
 		readWaypointsFromDb(waypoints);
 		readVilleFromDb(villes);
-		readRouteFromDb(routes,waypoints);
+		readRouteFromDb(routes, waypoints);
 
 		this->carte = Carte(contour,routes,villes,waypoints);
 }
@@ -62,9 +61,7 @@ void BDD::readContourFromDb(Contour &contour){
 		points.push_back(Point(num_pt,lat,lon));
 	}
     contour = Contour(points);
-
-
-};
+}
 
 /**
  * @brief Get the waypoints form the DB
@@ -80,9 +77,9 @@ void BDD::readWaypointsFromDb(std::vector<Waypoint> & waypoint){
 
 	while(res->next()){ 
 		std::string nom = res->getString("nom");
-		int lat = res->getInt("lat");
-		int lon = res->getInt("lon");
-		waypoint.push_back(Waypoint(nom,lat,lon));
+		float lat = res->getDouble("lat");
+		float lon = res->getDouble("lon");
+		waypoint.push_back(Waypoint(nom,lon,lat));
 	}
 }
 
@@ -92,17 +89,16 @@ void BDD::readWaypointsFromDb(std::vector<Waypoint> & waypoint){
  * @param ville vector of ville
  * @return void
  */
-void BDD::readVilleFromDb(std::vector<Ville> & ville){
-	
+void BDD::readVilleFromDb(std::vector<Ville>& ville) {
 	sql::Statement *stmt = con->createStatement();
 	sql::ResultSet *res = stmt->executeQuery("SELECT nom, code_postal, nb_habitants, site FROM ville");
 
-	while(res->next()){ 
-		std::string nom = res->getString("nom");
+	while(res->next()) { 
+		std::string nom_ville = res->getString("nom");
 		std::string code_postal = res->getString("code_postal");
 		int nb_habitants = res->getInt("nb_habitants");
 		std:: string site = res->getString("site");
-
+        
 		// Get lon and lat from db
 		sql::PreparedStatement* pstmt = con->prepareStatement("SELECT lat, lon FROM waypoint WHERE nom = ?");
 		pstmt->setString(1, nom_ville); // Bind the nom_ville value to the placeholder
@@ -115,8 +111,7 @@ void BDD::readVilleFromDb(std::vector<Ville> & ville){
 		} else {
 			std::cout << "No results found.\n";
 		}
-		ville.push_back(Ville(nom_ville, code_postal, nb_habitants, site, lon, lat)); // New ville initialisation		
-		
+		ville.push_back(Ville(nom_ville, code_postal, nb_habitants, site, lon, lat)); // New ville initialisation
 	}
 }
 
@@ -130,21 +125,24 @@ void BDD::readVilleFromDb(std::vector<Ville> & ville){
  * Basically we implement the 2 param because the informations in the DB is not what we need in the project
  * 
  */
-void BDD::readRouteFromDb(std::vector<Route> & route, std::vector<Waypoint> &waypoints){
+void BDD::readRouteFromDb(std::vector<Route>& route, std::vector<Waypoint>& waypoints){
 	
 	sql::Statement *stmt = con->createStatement();
 	sql::ResultSet *res = stmt->executeQuery("SELECT nom_debut, nom_fin, distance FROM route");
 	
 
 	while(res->next()){ 
-		std:: string nom_debut = res->getString("nom_debut");
+		std:: string num_debut = res->getString("nom_debut");
 		std:: string nom_fin = res->getString("nom_fin");
 		int distance = res->getInt("distance");
-		int index_debut = findRouteIndex(nom_debut);
-		int index_fin = findRouteIndex(nom_fin);
-		route.push_back(Route(index_debut,index_fin,distance));
+		
+		int i_debut = this->findRouteIndex(num_debut, waypoints);
+		int i_fin = this->findRouteIndex(nom_fin, waypoints);
+        
+		route.push_back(Route(i_debut, i_fin, distance));
 	}
 }
+
 
 /**
  * @brief Get a certain index corresponding for the route threw the waypoint
@@ -156,7 +154,7 @@ void BDD::readRouteFromDb(std::vector<Route> & route, std::vector<Waypoint> &way
  * 
  * This function is there to get the index of a route by comparing the name and the waypoint with the same name
  */
-int BDD::findRouteIndex(std::string nom, std::vector<Waypoint> &waypoints){
+int BDD::findRouteIndex(std::string nom, std::vector<Waypoint> &waypoints) {
 	int index = -1;
 	for (int i = 0;i<static_cast<int> (waypoints.size());i++) {
 		if(waypoints[i].getNom() == nom){
@@ -166,3 +164,4 @@ int BDD::findRouteIndex(std::string nom, std::vector<Waypoint> &waypoints){
 	}
 	return index;
 }
+

@@ -47,3 +47,4 @@ class MiniView : public QGraphicsView {
 
 
 #endif
+

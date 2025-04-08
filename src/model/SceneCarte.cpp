@@ -9,7 +9,6 @@
  * 
  * Constructor of the class
  */
-
 SceneCarte::SceneCarte(Carte& carte) {
     // Init carte and mainWindow
     this->carte = carte;
@@ -39,7 +38,6 @@ SceneCarte::SceneCarte(Carte& carte) {
  * @param Contour The outline that contains all the points.
  * @return void
  */
-
 void SceneCarte::drawContour(Contour contour) {
     QPolygonF polygon;
 
@@ -53,7 +51,6 @@ void SceneCarte::drawContour(Contour contour) {
     QGraphicsPolygonItem* contourItem = new QGraphicsPolygonItem(polygon);
     contourItem->setPen(QPen(Qt::black, 1, Qt::SolidLine));
     contourItem->setBrush(QBrush(Qt::green));   // Fill with green
-   
 
     // Add contour to the scene
     this->addItem(contourItem); 
@@ -65,7 +62,6 @@ void SceneCarte::drawContour(Contour contour) {
  * @param route vector of roads
  * @return void
  */
-
 void SceneCarte::drawRoute(std::vector<Route> routes) {
     std::vector<Waypoint> waypoints = this->carte.getWaypoints();
     
@@ -93,7 +89,6 @@ void SceneCarte::drawRoute(std::vector<Route> routes) {
  * @param villes Vector of roads
  * @return void
  */
-
 void SceneCarte::drawVille(std::vector<Ville> villes) {
     for (auto& ville : villes) {
         double x, y;
@@ -122,7 +117,6 @@ void SceneCarte::drawVille(std::vector<Ville> villes) {
  * @param waypoints vector of waypoints
  * @return void
  */
-
 void SceneCarte::drawWaypoint(std::vector<Waypoint> waypoints) {
     for(auto& waypoint : waypoints) {
         double x, y;
@@ -152,7 +146,6 @@ void SceneCarte::drawWaypoint(std::vector<Waypoint> waypoints) {
  * @param path vector of int of a path
  * @return void
  */
-
 void SceneCarte::drawShortestPath(std::vector<int> path) {
     std::vector<Waypoint> waypoints = this->carte.getWaypoints();
     for(int i = 0; i < static_cast<int>(path.size())-1; ++i) {
@@ -216,7 +209,11 @@ bool SceneCarte::isVille(std::string wp_name) {
 
 
 int SceneCarte::getDistance() {
-    return 0;
+    std::vector<Waypoint> waypoints = this->carte.getWaypoints();
+    int index1 = this->graph.findWaypointIndex(Waypoint(this->start));
+    int index2 =  this->graph.findWaypointIndex(Waypoint(this->dest));
+
+    return this->graph.getDistance(waypoints[index1], waypoints[index2]);
 }
 
 /**
@@ -226,30 +223,46 @@ int SceneCarte::getDistance() {
  * @param dest name of the waypoint we are going to
  * @return void
  */
-
 void SceneCarte::computeAndDrawShortestPath(const std::string& start, const std::string& dest) {
     /*
      1. Get waypoints from name
      2. call the shortest path
      3. Implement the drawShortestPath and call it
     */
-
+   
     // Validate if start and dest are villes before...
     if(isVille(start) && isVille(dest)) {
+        // Init start and dest
+        this->start = start;
+        this->dest = dest;
+    
         // Get Waypoints
         Waypoint wp_start(start);
         Waypoint wp_dest(dest);
         
         // Compute the shortest path
         std::vector<int> path = this->graph.getShortestPath(wp_start, wp_dest);
+        this->graph.visualizePath(path);
+
+        // Clear the previous drawing and draw the new line
+        this->clear(); 
+
+        // Draw contour
+        this->drawContour(carte.getContour());
+
+        // Draw Waypoints  Must be called first before ville
+        this->drawWaypoint(carte.getWaypoints());
+
+        // Draw ville 
+        this->drawVille(carte.getVilles());
+
+        // Draw Routes
+        this->drawRoute(carte.getRoutes());
         
         // Draw ShortestPath
         this->drawShortestPath(path);
-        this->graph.visualizePath(path);
-
+        
     } else {
         std::cout << "City not valid !! \n";
     }
-
 }
-

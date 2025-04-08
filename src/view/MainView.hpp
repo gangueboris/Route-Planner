@@ -72,7 +72,7 @@ class MainView : public QGraphicsView {
 			//painter->save(); // pas utile
 			painter->setWorldMatrixEnabled(false);// mettre en coords View (pixels)
 			// Chargement image et rotation selon orientation plan
-			QPixmap pixmap("north.png");
+			QPixmap pixmap("view/north.png");
 			QTransform matrice;
 			matrice.rotate(orientation_nord);
 			QPixmap pixmap2 = pixmap.transformed(matrice);
@@ -82,25 +82,36 @@ class MainView : public QGraphicsView {
 			//painter->restore();  // pas utile
 		}
 		void drawForeground(QPainter *painter, const QRectF &) override {
-			//painter->save();  // pas utile
-			painter->setWorldMatrixEnabled(false);// mettre en coords View (pixels)
-			painter->setPen(QPen(Qt::black, 0));
-			qreal echelle = this->transform().m11();
-			int x2 = viewport()->x()+viewport()->width()-10;
-			int y2 = viewport()->y()+viewport()->height()-10;
-			int x1 = x2 - echelle;
+			painter->setTransform(QTransform(), false); // Switch to view coordinates (pixels)
+			painter->setPen(QPen(Qt::black, 2));
+		
+			QFont font("Arial", 12, QFont::Bold);
+			painter->setFont(font);
+		
+			// Fixed length of scale bar (in pixels) – Adjust this value as needed
+			int scaleBarLength = 50; // Assume 100 pixels = 10 km
+			int x2 = this->width() - 10;  // 10px margin from right
+			int y2 = this->height() - 10; // 10px margin from bottom
+			int x1 = x2 - scaleBarLength;
 			int y1 = y2;
-			int longueur_tick = qMin(static_cast<int>(echelle/10),5);
-			painter->drawLine(x1,y1,x2,y2);
-			painter->drawLine(x1,y1-longueur_tick,x1,y1+longueur_tick);
-			painter->drawLine(x2,y2-longueur_tick,x2,y2+longueur_tick);
-
-			QRectF rect_texte(x1, y1-30, x2-x1-30, 20 );
-			painter->drawText(rect_texte, Qt::AlignCenter|Qt::TextDontClip,"10 km");
-
-			painter->setWorldMatrixEnabled(true);
-			//painter->restore();  // pas utile
+			
+			// Tick length (small vertical lines)
+			int tickLength = 3; //qMin(scaleBarLength / 10, 5);
+		
+			// Draw scale bar
+			painter->drawLine(x1, y1, x2, y2);
+			painter->drawLine(x1, y1 - tickLength, x1, y1 + tickLength);
+			painter->drawLine(x2, y2 - tickLength, x2, y2 + tickLength);
+		
+			// Adjust text position
+			QFontMetrics metrics(font);
+			int textWidth = metrics.horizontalAdvance("10 km");
+			QRectF rect_texte(x1 + (scaleBarLength - textWidth) / 2, y1 - 25, textWidth, 20);
+			
+			// Draw text
+			painter->drawText(rect_texte, Qt::AlignCenter | Qt::TextDontClip, "10 km");
 		}
+		
 	private:
 		int orientation_nord;
 
