@@ -103,8 +103,12 @@ void SceneCarte::drawVille(std::vector<Ville> villes) {
         std::string text_tooltip = ville.getInfos();
         villeItem->setToolTip(QString::fromStdString(text_tooltip));
 
+        //Attach the name of the city by a key to get it after on a right click on it
+        villeItem->setData(0, QString::fromStdString(ville.getNom()));
+
         // Add to the scene
         this->addItem(villeItem);
+
     }
 }
 

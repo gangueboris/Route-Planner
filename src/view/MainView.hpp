@@ -4,6 +4,11 @@
 #include <QGraphicsView>
 #include <QWheelEvent>
 #include <QMouseEvent>
+#include <QMenu>
+#include <QAction>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QCursor>
 
 #include "model/SceneCarte.hpp"
 
@@ -31,7 +36,7 @@ class MainView : public QGraphicsView {
 		void coord_viewport(QRectF);
 		void position(QPointF);
 
-	private:
+	protected:
 		// Gestionnaires d'évènements
 
 		// Fit de la vue sur les limites de la scène
@@ -62,12 +67,43 @@ class MainView : public QGraphicsView {
 			// re-propage l'évènement
 			QGraphicsView::paintEvent(event);
 		}
+
 		void mouseMoveEvent(QMouseEvent *event) override{
 			QPointF pos_scene = mapToScene(event->pos());
 			emit position(pos_scene);
 			// re-propage l'évènement
 			QGraphicsView::mouseMoveEvent(event);
 		}
+
+		void mousePressEvent(QMouseEvent *event) override{
+			if(event->button() == Qt::RightButton){
+				//Conversion des coord du click en celle de la scène
+				QPointF pos_scene = mapToScene(event->pos());
+				//Récupère les coordonées de ma ville, identifié mon item sous click
+				QGraphicsItem * item = scene()->itemAt(pos_scene, transform());
+				if(item){
+					QString villeName = item->data(0).toString(); //récuperer le nom de la ville
+					if(!villeName.isEmpty()){
+						//Création du menu pour le click droit
+						QMenu contextMenu;
+						QAction * openWikipediaAction = new QAction ("Afficher le wikipédia de la ville", this);
+						contextMenu.addAction(openWikipediaAction);
+						
+						//Connect pour le menu 
+						connect(openWikipediaAction, &QAction::triggered, this, [villeName](){
+							//Remplace le %1 par le nom de la ville
+							QString url = QString("https://fr.wikipedia.org/wiki/%1").arg(villeName);
+							QDesktopServices::openUrl(QUrl(url));
+						});
+						contextMenu.exec(QCursor::pos());
+					}
+				} else {
+					//Si ce n'est pas un click droit l'évènement est gérer comme un click standart
+					QGraphicsView::mousePressEvent(event);
+				}
+			}
+		}
+
 		void drawBackground( QPainter *painter, const QRectF &) override {
 			//painter->save(); // pas utile
 			painter->setWorldMatrixEnabled(false);// mettre en coords View (pixels)
@@ -81,6 +117,7 @@ class MainView : public QGraphicsView {
 			painter->setWorldMatrixEnabled(true);
 			//painter->restore();  // pas utile
 		}
+
 		void drawForeground(QPainter *painter, const QRectF &) override {
 			painter->setTransform(QTransform(), false); // Switch to view coordinates (pixels)
 			painter->setPen(QPen(Qt::black, 2));
