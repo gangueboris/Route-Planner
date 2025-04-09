@@ -19,8 +19,8 @@
  *
  * This class basically draws on a scene with all informations from the DB
  *
- * @author Boris Gangue
- * @date April 2, 2025
+ * @author Boris Gangue, Gaspard Vieujean
+ * @date April 2-9, 2025
  */
 class SceneCarte : public QGraphicsScene {
 Q_OBJECT

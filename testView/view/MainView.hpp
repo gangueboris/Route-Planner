@@ -58,19 +58,29 @@ class MainView : public QGraphicsView {
 			// re-propage l'évènement
 			QGraphicsView::mouseMoveEvent(event);
 		}
-		void drawBackground( QPainter *painter, const QRectF &) override {
-			//painter->save(); // pas utile
-			painter->setWorldMatrixEnabled(false);// mettre en coords View (pixels)
-			// Chargement image et rotation selon orientation plan
+		void drawBackground(QPainter *painter, const QRectF &) override {
+			// Disable world matrix to work in viewport coordinates
+			painter->setWorldMatrixEnabled(false);
+		
+			// Draw blue background first (covers entire viewport)
+			painter->setBrush(QBrush(QColor(70, 130, 180))); // RGB for blue
+			painter->setPen(Qt::NoPen); // No border
+			painter->drawRect(viewport()->x(), viewport()->y(), viewport()->width(), viewport()->height());
+		
+			// Load and transform the image
 			QPixmap pixmap("view/north.png");
 			QTransform matrice;
 			matrice.rotate(orientation_nord);
 			QPixmap pixmap2 = pixmap.transformed(matrice);
-
-			painter->drawPixmap(viewport()->x(),viewport()->y(),pixmap2);
+		
+			// Draw the transformed image on top
+			painter->drawPixmap(viewport()->x(), viewport()->y(), pixmap2);
+		
+			// Re-enable world matrix for the rest of the drawing operations
 			painter->setWorldMatrixEnabled(true);
-			//painter->restore();  // pas utile
 		}
+
+		
 		void drawForeground(QPainter *painter, const QRectF &) override {
 			painter->setTransform(QTransform(), false); // Switch to view coordinates (pixels)
 			painter->setPen(QPen(Qt::black, 2));

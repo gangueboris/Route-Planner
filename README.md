@@ -5,7 +5,6 @@ The project involves developing a graphical application in C++ to calculate and 
 ## *Authors*
 - `Boris GANGUE`
 - `Gaspard VIEUJEAN`
-- `Ahmed YAHA`
 
 ---
 
