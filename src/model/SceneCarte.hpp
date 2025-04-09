@@ -22,7 +22,6 @@
  * @author Boris Gangue
  * @date April 2, 2025
  */
-
 class SceneCarte : public QGraphicsScene {
 Q_OBJECT
 public :
@@ -36,15 +35,17 @@ public :
        void drawShortestPath(std::vector<int> path);
        int getDistance();
        void computeAndDrawShortestPath(const std::string& start, const std::string& dest);
-       
+
+signals:
+    void signalInvalidVille(const std::string& invalid_ville);
+
+
 private:
        static std::map<std::string, QColor> tabColors;
        void latLonToXY(float lon, float lat, double &x, double &y);
        bool isVille(std::string wp_name);
        Graph graph;
        Carte carte;
-       std::string start;
-       std::string dest;
 };
 
 #endif

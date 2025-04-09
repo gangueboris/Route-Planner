@@ -1,33 +1,55 @@
 #include "Graph.hpp"
 
+/**
+ * @brief Computes the total distance of the path stored in pathIndices.
+ * 
+ * This method iterates through the indices of the path, retrieves the corresponding routes,
+ * and sums up the distances of the connected segments.
+ * 
+ * @return The total distance of the path.
+ */
 double Graph::getDistance() {
     int distance = 0;
-    for(int i = 0; i < static_cast<int>(this->pathIndices.size())-1; ++i) {
-        int index1 = pathIndices[i];
-        int index2 = pathIndices[i + 1];
+
+    for(int i = 0; i < static_cast<int>(this->pathIndices.size()) - 1; ++i) {
+        int index1 = pathIndices[i];       // Current waypoint index
+        int index2 = pathIndices[i + 1];   // Next waypoint index
+
+        // Search for a route that connects index1 and index2
         for(const auto& route : this->routes) {
-           if((route.getDebut() == index1 && route.getFin() == index2) || (route.getDebut() == index2 && route.getFin() == index1)) {
-              distance += route.getDistance();
-           }
+            // Check if the route connects the two indices in either direction
+            if ((route.getDebut() == index1 && route.getFin() == index2) || (route.getDebut() == index2 && route.getFin() == index1)) {
+                distance += route.getDistance(); // Accumulate the distance
+            }
         }
     }
+
     return distance;
 }
 
+
 /**
- * @brief Creates an adjacency list representing a sparse graph.
+ * @brief Constructs the adjacency list representation of the graph.
  * 
- * This function connects waypoints if the distance between them is within a given threshold.
+ * This method processes all routes and establishes connections between waypoints.
+ * A waypoint is considered a neighbor of another if there is a direct route connecting them.
  * 
- * @return void
+ * **Criteria for defining neighbors:**  
+ * - Two waypoints are neighbors if they are connected by a route.  
+ * - The adjacency list stores these connections as bidirectional (undirected graph).  
+ * - Each edge is associated with a distance (route length).  
+ * 
+ * @note This adjacency list is used for graph traversal algorithms (shortest path search).
  */
 void Graph::createAdjacencyList() {
+    // Iterate through all routes to establish connections between waypoints
     for (const auto& route : this->routes) {
         std::string wp_name1 = waypoints[route.getDebut()].getNom();
         std::string wp_name2 = waypoints[route.getFin()].getNom();
-        int dist = route.getDistance();
 
-        // Add bidirectional edges for an undirected graph
+        int dist = route.getDistance();  
+
+        // Add bidirectional edges to the adjacency list for an undirected graph
         adjacencyList[wp_name1].push_back({wp_name2, dist});
         adjacencyList[wp_name2].push_back({wp_name1, dist});
     }

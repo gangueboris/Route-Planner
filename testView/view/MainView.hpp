@@ -21,7 +21,7 @@ class MainView : public QGraphicsView {
 		void coord_viewport(QRectF);
 		void position(QPointF);
 
-	private:
+	protected:
 		// Gestionnaires d'évènements
 
 		// Fit de la vue sur les limites de la scène

@@ -1,7 +1,4 @@
 #include "SceneCarte.hpp"
-
-//std::map<std::string, QColor> SceneCarte::tabColors = {{"black", Qt::black}, {"green", Qt::green}};
-
 /**
  * @brief Draw the waypoints, contour, ville and routes from a Carte
  * 
@@ -10,9 +7,8 @@
  * Constructor of the class
  */
 SceneCarte::SceneCarte(Carte& carte) {
-    // Init carte and mainWindow
+    // Init carte and the graph
     this->carte = carte;
-    
     this->graph = Graph(this->carte.getWaypoints(), this->carte.getRoutes());
 
    // Draw contour
@@ -38,20 +34,22 @@ SceneCarte::SceneCarte(Carte& carte) {
 void SceneCarte::drawContour(Contour contour) {
     QPolygonF polygon;
 
+    // Convert each point from latitude/longitude to scene coordinates
     for (auto& point : contour.getPoints()) {
         double x, y;
         latLonToXY(point.getLon(), point.getLat(), x, y);
-        polygon << QPointF(x, y);
+        polygon << QPointF(x, y);  // Store the transformed point in the polygon
     }
 
     // Create and configure the contour item
     QGraphicsPolygonItem* contourItem = new QGraphicsPolygonItem(polygon);
-    contourItem->setPen(QPen(Qt::black, 1, Qt::SolidLine));
-    contourItem->setBrush(QBrush(Qt::green));   // Fill with green
+    contourItem->setPen(QPen(Qt::black, 1, Qt::SolidLine)); // Set black border with 1px thickness
+    contourItem->setBrush(QBrush(Qt::green));   // Fill the contour with green color
 
-    // Add contour to the scene
+    // Add the contour shape to the scene for rendering
     this->addItem(contourItem); 
 }
+
 
 /**
  * @brief Draw roads in Qt from a vector of Road
@@ -60,22 +58,25 @@ void SceneCarte::drawContour(Contour contour) {
  * @return void
  */
 void SceneCarte::drawRoute(std::vector<Route> routes) {
+    // Retrieve the list of waypoints from the map
     std::vector<Waypoint> waypoints = this->carte.getWaypoints();
     
     for (auto& route : routes) {
-        // Get waypoints
+        // Get the start and end waypoints of the route
         Waypoint wp_start = waypoints[route.getDebut()];
         Waypoint wp_end = waypoints[route.getFin()];
 
         double x1, y1, x2, y2;
+        
+        // Convert latitude/longitude to scene coordinates for both waypoints
         latLonToXY(wp_start.getLongitude(), wp_start.getLatitude(), x1, y1);
         latLonToXY(wp_end.getLongitude(), wp_end.getLatitude(), x2, y2);
 
-        // Create and configure the line item
+        // Create and configure the line item representing the route
         QGraphicsLineItem* routeLine = new QGraphicsLineItem(x1, y1, x2, y2);
-        routeLine->setPen(QPen(Qt::black, 1));  
+        routeLine->setPen(QPen(Qt::black, 1));  // Set black color with 1px thickness
 
-        // Add to the scene
+        // Add the route line to the scene for rendering
         this->addItem(routeLine);
     }
 }
@@ -89,24 +90,27 @@ void SceneCarte::drawRoute(std::vector<Route> routes) {
 void SceneCarte::drawVille(std::vector<Ville> villes) {
     for (auto& ville : villes) {
         double x, y;
+        
+        // Convert latitude/longitude to scene coordinates
         latLonToXY(ville.getLongitude(), ville.getLatitude(), x, y);
 
-        // Create a small rectangle centered at (x, y)
+        // Create a small square centered at (x, y) with a size of 5x5 pixels
         QRectF rect(x - 2.5, y - 2.5, 5, 5);
         
-        // Create and configure the rectangle item
+        // Create and configure the rectangle item representing the city
         QGraphicsRectItem* villeItem = new QGraphicsRectItem(rect);
         villeItem->setPen(QPen(Qt::black, 1)); // Black border
         villeItem->setBrush(QBrush(Qt::gray)); // Gray fill
 
-        // Handle the tooltip
+        // Set a tooltip displaying information about the city
         std::string text_tooltip = ville.getInfos();
         villeItem->setToolTip(QString::fromStdString(text_tooltip));
 
-        // Add to the scene
+        // Add the city rectangle to the scene for visualization
         this->addItem(villeItem);
     }
 }
+
 
 /**
  * @brief Draw waypoints in Qt from a vector of Waypoint
@@ -117,25 +121,28 @@ void SceneCarte::drawVille(std::vector<Ville> villes) {
 void SceneCarte::drawWaypoint(std::vector<Waypoint> waypoints) {
     for(auto& waypoint : waypoints) {
         double x, y;
+        
+        // Convert latitude/longitude to scene coordinates
         latLonToXY(waypoint.getLongitude(), waypoint.getLatitude(), x, y);
 
-        // Create a small circle centered at (x, y)
+        // Define the size of the waypoint (small circle)
         double radius = 2;
         QRectF circleRect(x - radius, y - radius, radius * 2, radius * 2);
 
-        // Create and configure the circle item
+        // Create and configure the circle item representing the waypoint
         QGraphicsEllipseItem* waypointItem = new QGraphicsEllipseItem(circleRect);
         waypointItem->setPen(QPen(Qt::black, 1));  // Black border
-        waypointItem->setBrush(QBrush(Qt::black));  // Gray fill
+        waypointItem->setBrush(QBrush(Qt::black));  // Black fill
 
-        // Handle the tooltip
+        // Set a tooltip displaying information about the waypoint
         std::string text_tooltip = waypoint.getInfos();
         waypointItem->setToolTip(QString::fromStdString(text_tooltip));
 
-        // Add to the scene
+        // Add the waypoint representation to the scene
         this->addItem(waypointItem);
     }
 }
+
 
 /**
  * @brief Draw the shortest path from a city to another
@@ -145,24 +152,31 @@ void SceneCarte::drawWaypoint(std::vector<Waypoint> waypoints) {
  */
 void SceneCarte::drawShortestPath(std::vector<int> path) {
     std::vector<Waypoint> waypoints = this->carte.getWaypoints();
+
+    // Iterate through the path to draw connections between consecutive waypoints
     for(int i = 0; i < static_cast<int>(path.size())-1; ++i) {
         int index1 = path[i];
         int index2 = path[i + 1];
+
+        // Retrieve the waypoints corresponding to the indices in the path
         Waypoint wp_start = waypoints[index1];
         Waypoint wp_dest = waypoints[index2];
 
         double x1, y1, x2, y2;
+        
+        // Convert latitude/longitude coordinates to scene coordinates
         latLonToXY(wp_start.getLongitude(), wp_start.getLatitude(), x1, y1);
         latLonToXY(wp_dest.getLongitude(), wp_dest.getLatitude(), x2, y2);
 
-        // Create and configure the line item
+        // Create and configure a red line representing the shortest path segment
         QGraphicsLineItem* pathLine = new QGraphicsLineItem(x1, y1, x2, y2);
-        pathLine->setPen(QPen(Qt::red, 2));  
+        pathLine->setPen(QPen(Qt::red, 2));  // Red color with thickness 2
 
-        // Add to the scene
+        // Add the path segment to the scene
         this->addItem(pathLine);
     }
 }
+
 
 /**
  * @brief Converts geographic coordinates (longitude, latitude) to Cartesian (x, y) using the Mercator projection.
@@ -189,19 +203,18 @@ void SceneCarte::latLonToXY(float lon, float lat, double &x, double &y) {
 }
 
 /**
- * @brief indicates from a name if the waypoint is a city
+ * @brief Determines whether a given waypoint is a city based on its name.
  * 
- * @param wp_name name of a waypoint
- * @return FALSE
+ * @param wp_name Name of the waypoint to check.
+ * @return true if the waypoint corresponds to a city, false otherwise.
  */
-
 bool SceneCarte::isVille(std::string wp_name) {
     for (const auto& ville : this->carte.getVilles()) {
         if (ville.getNom() == wp_name) {
             return true; 
         }
     }
-    return false;
+    return false;  
 }
 
 
@@ -217,18 +230,8 @@ int SceneCarte::getDistance() {
  * @return void
  */
 void SceneCarte::computeAndDrawShortestPath(const std::string& start, const std::string& dest) {
-    /*
-     1. Get waypoints from name
-     2. call the shortest path
-     3. Implement the drawShortestPath and call it
-    */
-   
     // Validate if start and dest are villes before...
     if(isVille(start) && isVille(dest)) {
-        // Init start and dest
-        this->start = start;
-        this->dest = dest;
-    
         // Get Waypoints
         Waypoint wp_start(start);
         Waypoint wp_dest(dest);
@@ -256,6 +259,7 @@ void SceneCarte::computeAndDrawShortestPath(const std::string& start, const std:
         this->drawShortestPath(path);
         
     } else {
-        std::cout << "City not valid !! \n";
+        std::string invalid_ville = isVille(start) ? dest : start;
+        emit this->signalInvalidVille(invalid_ville);
     }
 }

@@ -34,6 +34,7 @@ MainWindow::MainWindow(Carte& carte) : carte(carte) {
 	connect(this->mainView, &MainView::coord_viewport, this->miniView, &MiniView::trace_viewport);
 	connect(this->mainView, &MainView::position, this, &MainWindow::geoCoordsSlot);
 	connect(this->compute, &QPushButton::clicked, this, &MainWindow::slotCompute);
+    connect(this->sceneCarte, &SceneCarte::signalInvalidVille, this, &MainWindow::slotInvalidVille);
 }
 
 /**
@@ -176,3 +177,8 @@ void MainWindow::geoCoordsSlot(QPointF p) {
  
     QMessageBox::critical(nullptr,"ERROR", error_message);   
  }
+
+
+ void MainWindow::slotInvalidVille(const std::string& invalid_ville) {
+    QMessageBox::warning(nullptr, "WARNING", QString("%1 is not a Ville!").arg(QString::fromStdString(invalid_ville)));
+}

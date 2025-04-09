@@ -43,6 +43,7 @@ class MainWindow: public QMainWindow {
     public slots:
         void geoCoordsSlot(QPointF p);
         void slotCompute();
+        void slotInvalidVille(const std::string& invalid_ville);
     
 
     private:
