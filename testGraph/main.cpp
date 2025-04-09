@@ -1,6 +1,72 @@
 #include "Graph.hpp"
 #include <iostream>
 
+// Function to find the index of a waypoint in the vector
+int findWaypointIndex(const std::vector<Waypoint>& waypoints, const std::string& wp_name) {
+    for (size_t i = 0; i < waypoints.size(); ++i) {
+        if (waypoints[i].getNom() == wp_name) {
+            return static_cast<int>(i);
+        }
+    }
+    return -1; // Not found
+}
+
+std::vector<Route> createRoutes(const std::vector<Waypoint>& waypoints) {
+    std::vector<Route> routes;
+
+    struct RouteData {
+        std::string nom_debut;
+        std::string nom_fin;
+        int distance;
+    };
+
+    std::vector<RouteData> routeData = {
+        {"Ancenis", "Angers", 52}, {"Ancenis", "Nantes", 37}, {"Auray", "Hennebont", 29},
+        {"Auray", "Vannes", 20}, {"Barrage de la Rance", "Dinard", 6}, {"Brest", "Guipavas Aéroport", 11},
+        {"Brest", "Pont de l'Iroise", 9}, {"Caen", "Avranches", 101}, {"Carhaix", "Guingamp", 49},
+        {"Carhaix", "Lorient", 74}, {"Chateaulin", "Carhaix", 46}, {"Chateaulin", "Quimper", 29},
+        {"Cholet", "Porte des Sorinières", 59}, {"Daoulas", "Chateaulin", 28}, {"Dinan", "Echangeur de Tramain", 31},
+        {"Dinan", "Mesnil Roc'h", 12}, {"Dinard", "Dinan", 21}, {"Echangeur de la Chesnaie", "Dinan", 20},
+        {"Echangeur de la Chesnaie", "Pontorson", 33}, {"Echangeur de Tramain", "Lamballe", 12},
+        {"Echangeur de Tramain", "Rennes", 69}, {"Fougères", "Pontaubault", 35}, {"Fougères", "Vitré", 29},
+        {"Guingamp", "Morlaix", 52}, {"Guingamp", "Saint Brieuc", 33}, {"Guipavas Aéroport", "Morlaix", 53},
+        {"Hennebont", "Lorient", 10}, {"Hennebont", "Ploermel", 76}, {"La Rochelle", "Marans", 27},
+        {"Lamballe", "Yffiniac", 14}, {"Lannion", "Guingamp", 34}, {"Loudéac", "Carhaix", 66},
+        {"Loudéac", "Lamballe", 43}, {"Loudéac", "Rennes", 92}, {"Loudéac", "Saint Brieuc", 44},
+        {"Marans", "La Roche sur Yon", 59}, {"Mesnil Roc'h", "Echangeur de la Chesnaie", 13},
+        {"Morlaix", "Carhaix", 46}, {"Morlaix", "Saint Michel-en-Grève", 26}, {"Paimpol", "Guingamp", 30},
+        {"Paimpol", "Lannion", 33}, {"Ploermel", "Loudéac", 43}, {"Ploermel", "Rennes", 68},
+        {"Pont de l'Iroise", "Daoulas", 15}, {"Pont de la Corde", "Morlaix", 14}, {"Pont de Saint Nazaire", "Saint Nazaire", 8},
+        {"Pont du Morbihan", "Pontchateau", 20}, {"Pontaubault", "Avranches", 7}, {"Pontchateau", "Savenay", 16},
+        {"Pontivy", "Hennebont", 45}, {"Pontivy", "Loudéac", 23}, {"Pontorson", "Pontaubault", 15},
+        {"Pornic", "Pont de Saint Nazaire", 20}, {"Pornic", "Porte des Sorinières", 52}, {"Pornic", "Villeneuve-en-Retz", 15},
+        {"Porte des Sorinières", "La Roche sur Yon", 66}, {"Porte des Sorinières", "Nantes", 9},
+        {"Quimper", "Pont L'Abbé", 19}, {"Quimper", "Quimperlé", 47}, {"Quimperlé", "Lorient", 24},
+        {"Redon", "Ploermel", 45}, {"Redon", "Pontchateau", 29}, {"Redon", "Rennes", 65},
+        {"Rennes", "Fougères", 48}, {"Rennes", "Mesnil Roc'h", 44}, {"Rennes", "Nantes", 107},
+        {"Saint Brieuc", "Paimpol", 43}, {"Saint Malo", "Barrage de la Rance", 8},
+        {"Saint Malo", "Echangeur de la Chesnaie", 19}, {"Saint Michel-en-Grève", "Lannion", 11},
+        {"Saint Nazaire", "Pontchateau", 24}, {"Saint Pol de Léon", "Pont de la Corde", 7},
+        {"Saint Pol de Léon", "Roscoff", 6}, {"Savenay", "Nantes", 38}, {"Savenay", "Saint Nazaire", 26},
+        {"Vannes", "Ploermel", 49}, {"Vannes", "Pont du Morbihan", 40}, {"Villeneuve-en-Retz", "La Roche sur Yon", 64},
+        {"Vitré", "Laval", 35}, {"Vitré", "Rennes", 38}, {"Yffiniac", "Saint Brieuc", 9}
+    };
+
+    for (const auto& rd : routeData) {
+        int i_debut = findWaypointIndex(waypoints, rd.nom_debut);
+        int i_fin = findWaypointIndex(waypoints, rd.nom_fin);
+        if (i_debut != -1 && i_fin != -1) {
+            routes.emplace_back(i_debut, i_fin, rd.distance);
+        } else {
+            std::cerr << "Error: Waypoint not found for " << rd.nom_debut << " or " << rd.nom_fin << std::endl;
+        }
+    }
+
+    return routes;
+}
+
+
+
 int main() {
     std::vector<Waypoint> waypoints = {
         {"Ancenis", -1.18194, 47.37333},
@@ -63,12 +129,14 @@ int main() {
         {"Yffiniac", -2.68006, 48.48039}
     };
     
+     
+    std::vector<Route> routes = createRoutes(waypoints);
 
     //std::cout << waypoints.size() << '\n';
-    Graph graph(waypoints, 53);
+    Graph graph(waypoints, routes);
 
     Waypoint start("Brest");
-    Waypoint end("Rennes");
+    Waypoint end("Angers");
 
     std::vector<int> path = graph.getShortestPath(start, end);
     graph.visualizePath(path);

@@ -28,7 +28,7 @@
 
 class Graph {
    public:
-      Graph(std::vector<Waypoint> waypoints_init, double precision_init = 92) : waypoints{waypoints_init}, precision{precision_init}{
+      Graph(std::vector<Waypoint> waypoints_init, std::vector<Route> routes_init) : waypoints{waypoints_init}, routes{routes_init}{
          createAdjacencyList();
       }
       Graph(){}
@@ -36,9 +36,7 @@ class Graph {
 
       std::vector<int> getShortestPath(const Waypoint& start, const Waypoint& end);
       void visualizePath(const std::vector<int>& path);
-      int getPrecision() {return precision;}
-      double getDistance(const Waypoint& wp1, const Waypoint& wp2) {return this->calculateDistance(wp1, wp2);}
-      void setPrecision(double new_precision) {precision = new_precision;}
+      double getDistance();
       void adjacencyListToEdgeListFile(const std::unordered_map<std::string, std::vector<std::pair<std::string, double>>>& adjacencyList, const std::string& filename);
       std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> getAdjacencyList() {return this->adjacencyList;}
       int findWaypointIndex(const Waypoint& wp);
@@ -46,12 +44,12 @@ class Graph {
    private:
       std::unordered_map<std::string, std::vector<std::pair<std::string, double>>> adjacencyList;
       std::vector<Waypoint> waypoints;
-      double precision;
+      std::vector<Route> routes;
+      std::vector<int> pathIndices;
       
       void createAdjacencyList();
-      double calculateDistance(const Waypoint& wp1, const Waypoint& wp2);
-      double calculateLinearPrecision(double distance);
-      double calculateLogarithmicPrecision(double distance);
+     
+     
      
 };
 

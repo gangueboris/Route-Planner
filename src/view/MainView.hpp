@@ -72,7 +72,7 @@ class MainView : public QGraphicsView {
 			//painter->save(); // pas utile
 			painter->setWorldMatrixEnabled(false);// mettre en coords View (pixels)
 			// Chargement image et rotation selon orientation plan
-			QPixmap pixmap("view/north.png");
+			QPixmap pixmap("../ressource/images/north.png");
 			QTransform matrice;
 			matrice.rotate(orientation_nord);
 			QPixmap pixmap2 = pixmap.transformed(matrice);

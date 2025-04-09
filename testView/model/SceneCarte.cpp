@@ -6,7 +6,7 @@ SceneCarte::SceneCarte(Carte& carte) {
     // Init carte and mainWindow
     this->carte = carte;
     
-    this->graph = Graph(this->carte.getWaypoints(), 70);
+    this->graph = Graph(this->carte.getWaypoints(), this->carte.getRoutes());
                                                                                                                                             
    // Draw contour
    this->drawContour(carte.getContour());
@@ -169,11 +169,7 @@ bool SceneCarte::isVille(std::string wp_name) {
 
 
 int SceneCarte::getDistance() {
-    std::vector<Waypoint> waypoints = this->carte.getWaypoints();
-    int index1 = this->graph.findWaypointIndex(Waypoint(this->start));
-    int index2 =  this->graph.findWaypointIndex(Waypoint(this->dest));
-
-    return this->graph.getDistance(waypoints[index1], waypoints[index2]);
+    return this->graph.getDistance();
 }
 
 void SceneCarte::computeAndDrawShortestPath(const std::string& start, const std::string& dest) {

@@ -212,3 +212,9 @@ Limites
 
 Même avec ces améliorations, il est impossible d'obtenir une précision parfaite de la distance routière sans utiliser une API de routage.
 Les calculs à vol d'oiseau ne tiennent pas compte des contraintes du réseau routier (sens uniques, virages interdits, etc.).
+
+
+
+## Graph Creation
+You are my neighour if their exist a route between use.
+So in the createAdjacencyList, before adding a wp_name as a neighour, instead of checking if the distance is less than a certains threshold, I have to check if a route exist between wp1, wp2.

@@ -11,7 +11,7 @@ class Route {
        Route(int i_debut, int i_fin, int distance) : i_debut(i_debut), i_fin(i_fin), distance(distance) {}
        
        // Destructor
-       ~Route(){};
+       ~Route(){}
        
        // Getters
        int getDebut() const {return i_debut;}

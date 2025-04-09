@@ -1,34 +1,18 @@
 #include "Graph.hpp"
 
-/**
- * @brief Calculates the great-circle distance between two geographical points using the Haversine formula.
- * 
- * @param wp1 The first waypoint containing latitude and longitude.
- * @param wp2 The second waypoint containing latitude and longitude.
- * @return The distance between the two points in kilometers.
- */
-double Graph::calculateDistance(const Waypoint& wp1, const Waypoint& wp2) {
-    // Convert latitude and longitude from degrees to radians
-    double lat1 = wp1.getLatitude() * M_PI / 180.0;
-    double lon1 = wp1.getLongitude() * M_PI / 180.0;
-    double lat2 = wp2.getLatitude() * M_PI / 180.0;
-    double lon2 = wp2.getLongitude() * M_PI / 180.0;
-
-    // Compute differences between the coordinates
-    double dLat = lat2 - lat1;
-    double dLon = lon2 - lon1;
-
-    // Apply the Haversine formula
-    double a = sin(dLat / 2.0) * sin(dLat / 2.0) + cos(lat1) * cos(lat2) * sin(dLon / 2.0) * sin(dLon / 2.0);
-    double c = 2.0 * atan2(sqrt(a), sqrt(1.0 - a));
-    
-    // Define Earth's radius in kilometers
-    const int earthRadius = 6378;
-    
-    // Compute and return the distance
-    return earthRadius * c;
+double Graph::getDistance() {
+    int distance = 0;
+    for(int i = 0; i < static_cast<int>(this->pathIndices.size())-1; ++i) {
+        int index1 = pathIndices[i];
+        int index2 = pathIndices[i + 1];
+        for(const auto& route : this->routes) {
+           if((route.getDebut() == index1 && route.getFin() == index2) || (route.getDebut() == index2 && route.getFin() == index1)) {
+              distance += route.getDistance();
+           }
+        }
+    }
+    return distance;
 }
-
 
 /**
  * @brief Creates an adjacency list representing a sparse graph.
@@ -38,18 +22,14 @@ double Graph::calculateDistance(const Waypoint& wp1, const Waypoint& wp2) {
  * @return void
  */
 void Graph::createAdjacencyList() {
-    double maxDistance = this->precision;
+    for (const auto& route : this->routes) {
+        std::string wp_name1 = waypoints[route.getDebut()].getNom();
+        std::string wp_name2 = waypoints[route.getFin()].getNom();
+        int dist = route.getDistance();
 
-    for (int i = 0; i < (int)waypoints.size(); ++i) {
-        for (int j = i + 1; j < (int)waypoints.size(); ++j) {
-            // Compute the distance between two waypoint in km
-            double dist = calculateDistance(waypoints[i], waypoints[j]);
-            if (dist <= maxDistance) {
-                // Add bidirectional edges for an undirected graph
-                adjacencyList[waypoints[i].getNom()].push_back({waypoints[j].getNom(), dist});
-                adjacencyList[waypoints[j].getNom()].push_back({waypoints[i].getNom(), dist});
-            }
-        }
+        // Add bidirectional edges for an undirected graph
+        adjacencyList[wp_name1].push_back({wp_name2, dist});
+        adjacencyList[wp_name2].push_back({wp_name1, dist});
     }
 }
 
@@ -109,9 +89,9 @@ std::vector<int> Graph::getShortestPath(const Waypoint& start, const Waypoint& e
             }
         }
     }
-
-    std::vector<int> pathIndices;
+    
     std::string current = end.getNom();
+    this->pathIndices.clear();
     
     // Reconstruct the shortest path by backtracking from the destination
     while (previous.find(current) != previous.end()) {
@@ -122,6 +102,8 @@ std::vector<int> Graph::getShortestPath(const Waypoint& start, const Waypoint& e
     // Add the start waypoint to the path
     pathIndices.push_back(findWaypointIndex(Waypoint(start.getNom())));
     std::reverse(pathIndices.begin(), pathIndices.end()); // Reverse to get correct order
+    
+
     return pathIndices;
 }
 
@@ -145,6 +127,8 @@ void Graph::visualizePath(const std::vector<int>& path) {
         }
     }
     std::cout << std::endl;
+
+    std::cout << "Distance : " << this->getDistance() << '\n';
 }
 
 /**
