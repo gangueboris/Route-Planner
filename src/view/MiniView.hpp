@@ -22,6 +22,8 @@ class MiniView : public QGraphicsView {
             scale(1, -1); // Invert the y-axis to match coordinate system conventions
         }
 
+      
+
         ~MiniView(){}
 
     public slots:

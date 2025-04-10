@@ -47,10 +47,7 @@ class Graph {
       std::vector<Route> routes;
       std::vector<int> pathIndices;
       
-      void createAdjacencyList();
-     
-     
-     
+      void createAdjacencyList(); 
 };
 
 #endif
