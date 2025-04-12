@@ -42,6 +42,7 @@ Before launching the application, make sure:
 - The MySQL database is correctly loaded on your Linux machine.
 - You have the **host name**, **database name**, **user name**, and **password** ready for authentication.
 
+![BDD](<ressource/images/BDD-login.png>)
 ---
 
 ## ✨ Features
