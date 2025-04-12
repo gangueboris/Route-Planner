@@ -1,18 +1,68 @@
-### **Route-Planner**  
+# 🗺️ Route-Planner
 
-The project involves developing a graphical application in C++ to calculate and display the shortest path between two cities using Qt and a MySQL database. 
+**Route-Planner** is a Qt-based application that visualizes a map of western France and allows users to:
 
-## *Authors*
+- Compute the **shortest path** between two cities using data stored in a MySQL database.
+- Access **Wikipedia information** about any city.
+- Interact with a dynamic and user-friendly **graphical interface**.
+
+---
+
+## 👥 Authors
+
 - `Boris GANGUE`
 - `Gaspard VIEUJEAN`
 
 ---
 
-## **1. Description of different parts of Route-Planner**  
+## ⚙️ Installation & Usage
 
-### **A. Database (MySQL)**  
-- **Tables:**  
-```shell
+### 1. Connect to MySQL  
+Ensure you have a MySQL server running with the appropriate database loaded.  
+The application connects using `libmysqlcppconn`.
+
+### 2. Compile the Application  
+Navigate to the `src` directory and run:
+
+```bash
+make
+```
+
+### 3. Run the Application  
+From the same directory, execute:
+
+```bash
+./routePlanner
+```
+
+---
+
+> ⚠️ **Important**  
+Before launching the application, make sure:
+- The MySQL database is correctly loaded on your Linux machine.
+- You have the **host name**, **database name**, **user name**, and **password** ready for authentication.
+
+---
+
+## ✨ Features
+
+- 🔍 **Shortest path computation** between two cities.
+- 🌐 **Wikipedia integration**: fetch and display city-related content.
+- 🗺️ **Interactive map** with route drawing.
+- 🧭 **Mini-map** with zoom/pan support, North arrow, and scale display.
+- 📌 **Cursor coordinate display** for better map interaction.
+- 🧪 **Input validation** for city names.
+- 🔒 **Login system** for connecting to the database.
+
+---
+
+## 🧠 Application Structure
+
+### A. 📦 Database (MySQL)
+
+#### **Schema Overview**
+
+```sql
 +-------------+
 |   CONTOUR   |
 +-------------+
@@ -41,113 +91,64 @@ The project involves developing a graphical application in C++ to calculate and 
 +--------------+
 ```
 
-- `Contour`: Stores geographical contour points.  
-- `Waypoint`: Represents nodes in the road network (intermediate points and cities).  
-- `Route`: Defines routes between waypoints (graph representation with distances).  
-- `Ville`: A subset of waypoints representing cities.  
+### B. 📊 Graph Structure
 
+![Graph](<ressource/images/graph_correct.png>)
 
-- **Connecting to MySQL:** Use `libmysqlcppconn` to fetch data.  
+The graph is built from the ROUTE and WAYPOINTS tables, using waypoints as vertices and routes as weighted edges.  
+A shortest-path algorithm (Dijkstra) is used to find the optimal path.
 
-### **B. Model (MVC - "Model" Part)**  
-- **Main Classes:**  
-  - `Carte`: Manages data and relationships between waypoints and routes.  
-  - `Waypoint`: Represents a network point (base class).  
-  - `Ville`: Inherits from `Waypoint` (includes postal code, population, and website).  
-  - `Route`: Links two waypoints with an associated distance.  
-  - `Graphe`: Stores the network structure and implements the shortest path algorithm.  
+### C. 🎨 Graphical Interface (Qt)
 
-![class-MVC](<ressource/images/class-mvc.png>)!
+#### **Main Functionalities**
+- Input fields for **departure** and **arrival** cities.
+- Visualization of the **computed shortest path** on the map.
+- Access to **city metadata** and **Wikipedia** page.
+- Responsive UI with mouse interactions and map navigation.
 
----
-
-- **Important Methods:**  
-  - `neighbours(int index) → vector<int>`: Returns neighboring waypoints.  
-  - `distance(int i1, int i2) → float`: Returns the distance between two waypoints.  
-  - `getShortestPath(int start, int end) → vector<Route>`: Implements Dijkstra or A*.  
-
-### **C. Graphical Interface (Qt)**  
-- **UI Elements:**  
-  - Input fields for departure and arrival cities.  
-  - Interactive map displaying the shortest route.  
-  - Mini-map with an overview view.  
-  - Optional features: cursor coordinates, scale, North arrow.  
-
-- **Graphical Display:**  
-  - Loading and displaying map data.  
-  - Dynamically displaying the computed route.  
-
-![alt text](<ressource/images/route-planner.png>)
+![UI](<ressource/images/route-planner.png>)
 
 ---
 
-## **PROJECT STRUCTURE**
+## 🗂️ Project Structure
 
 ```
-|── ressource/
+Route-Planner/
+├── ressource/
 │   ├── documents/
+│   │   ├── MiniProjet2024-2025.pdf
+│   │   ├── Presentation-RoutePlanner.pdf
+│   │   ├── Processus_implementation_graph_algorithm.pdf
+│   │   ├── RoadMap-RoutePlanner.pdf
+│   │   ├── edgeList.txt
+│   │   └── RoutePlanner-archive.zip
 │   ├── images/
-│   ├── north.png
-│── sql/
-│   ├── plans.sql
-│── src/
+│   │   ├── north.png
+│   │   ├── graph_correct.png
+│   │   └── route-planner.png
+├── sql/
+│   └── map.sql
+├── src/
 │   ├── model/
-│   │   ├── .hpp
-│   │   ├── .cpp
-│   │   ├── .hpp
-│   │   ├── .cpp
+│   │   ├── BDD.hpp/.cpp
+│   │   ├── Graph.hpp/.cpp
+│   │   ├── SceneCarte.hpp/.cpp
+│   │   ├── Carte.hpp
+│   │   ├── Contour.hpp
+│   │   ├── Waypoint.hpp
+│   │   ├── Route.hpp
+│   │   ├── Ville.hpp
+│   │   ├── Point.hpp
+│   │   └── libBDD.a
 │   ├── view/
-│   │   ├── MainWindow.hpp
-│   │   ├── MainWindow.cpp
-│   │   ├── LoginDialog.hpp
-│   │   ├── LoginDialog.cpp
+│   │   ├── MainWindow.hpp/.cpp
+│   │   ├── LoginDialog.hpp/.cpp
+│   │   ├── MainView.hpp
+│   │   └── MiniView.hpp
 │   ├── main.cpp
-│── README.md
-```
-
-## **Project guidelines** 
-- Respect file destination (put each file in their corresponding folder).
-- Respest Class name `CamelCase` (eg. MainWindow.hpp) logic.
-- Respect the comment adding:
-eg.
-**For a class**
-```cpp
-/**
- * @class ContactManager
- * @brief Manages a collection of contacts.
- *
- * This class allows adding, removing, and searching for contacts.
- * It provides efficient operations and supports saving/loading from a file.
- *
- * @author Boris Gangue
- * @date March 30, 2025
- */
-class ContactManager {
-public:
-    // Constructor and Destructor
-    ContactManager();
-    ~ContactManager();
-
-    // Member Functions
-    void addContact(const std::string& name, const std::string& phone);
-    bool removeContact(const std::string& name);
-    std::string searchContact(const std::string& name) const;
-
-private:
-    std::map<std::string, std::string> contacts; ///< Stores contacts in a name-phone mapping.
-};
-```
-
-**For a method**
-```cpp
-/**
- * @brief Adds a new contact to the contact list.
- * 
- * @param name The name of the contact.
- * @param phone The phone number of the contact.
- * @return void
- */
-void ContactManager::addContact(const std::string& name, const std::string& phone) {
-    contacts[name] = phone;
-}
+│   ├── makefile
+│   ├── .qmake.stask
+│   ├── src.pro
+│   └── routePlanner
+├── README.md
 ```

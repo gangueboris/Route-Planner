@@ -177,42 +177,6 @@ Si à un point D il y'a un soucis (construction), le poids associé au points D 
 - fonction qui calcule la précision optimale en fonction de la distance à vol d'oiseau entre les points. Par exemple, une fonction linéaire ou logarithmique qui augmente la précision avec la distance.
 - 
 
-1. Ajustement de la Précision Dynamique
-
-Varier la précision en fonction de la distance:
-Pour les distances courtes, une précision plus élevée (par exemple, 10-20 km) peut donner de meilleurs résultats, car les routes ont tendance à être plus directes.
-Pour les distances longues, une précision plus faible (par exemple, 50-100 km) peut être nécessaire pour éviter de créer un graphe trop dense avec des connexions irréalistes.
-Utiliser une fonction de précision adaptative:
-Vous pourriez créer une fonction qui calcule la précision optimale en fonction de la distance à vol d'oiseau entre les points. Par exemple, une fonction linéaire ou logarithmique qui augmente la précision avec la distance.
-2. Pondération des Arêtes du Graphe
-
-Facteurs de correction:
-Au lieu d'utiliser directement la distance à vol d'oiseau comme poids des arêtes, vous pouvez appliquer des facteurs de correction.
-Par exemple, vous pourriez multiplier la distance à vol d'oiseau par un facteur qui tient compte de la densité du réseau routier dans la région.
-Données géographiques supplémentaires:
-Si vous avez des données sur les types de routes (autoroutes, routes nationales, etc.), vous pouvez les utiliser pour pondérer les arêtes.
-Par exemple, vous pourriez donner un poids plus faible aux arêtes qui correspondent à des autoroutes.
-3. Amélioration de la Création du Graphe
-
-Triangulation de Delaunay ou graphes de Voronoï:
-Ces techniques permettent de créer des graphes qui reflètent mieux la structure du réseau routier.
-La triangulation de Delaunay connecte les points de manière à minimiser les angles des triangles, ce qui peut donner des résultats plus réalistes.
-Les graphes de Voronoï créent des régions autour de chaque point, et les arêtes connectent les points dont les régions sont adjacentes.
-Élimination des arêtes irréalistes:
-Après avoir créé le graphe, vous pouvez analyser les arêtes et supprimer celles qui sont clairement irréalistes.
-Par exemple, vous pourriez supprimer les arêtes qui traversent des obstacles naturels (montagnes, lacs) ou qui sont trop longues pour être des routes.
-4. Post-traitement du Chemin Trouvé
-
-Lissage du chemin:
-Le chemin trouvé par l'algorithme de Dijkstra peut contenir des segments anguleux. Vous pouvez appliquer des techniques de lissage pour rendre le chemin plus réaliste.
-Par exemple, vous pouvez utiliser des splines cubiques ou des algorithmes de lissage de courbes.
-Ajout de points intermédiaires:
-Si vous avez des données sur les routes principales, vous pouvez ajouter des points intermédiaires au chemin trouvé pour le rendre plus précis.
-Limites
-
-Même avec ces améliorations, il est impossible d'obtenir une précision parfaite de la distance routière sans utiliser une API de routage.
-Les calculs à vol d'oiseau ne tiennent pas compte des contraintes du réseau routier (sens uniques, virages interdits, etc.).
-
 
 
 ## Graph Creation
